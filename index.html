@@ -88,6 +88,8 @@ body{height:100%;box-sizing:border-box;background:var(--bg);color:var(--ink);fon
 #toast{position:absolute;left:50%;top:15%;transform:translateX(-50%);font-family:var(--f-display);font-size:1.9cqw;letter-spacing:.1em;
   color:var(--amber);text-shadow:.2cqw .2cqw 0 #000;opacity:0;transition:opacity .25s;pointer-events:none;width:max-content;max-width:84cqw;text-align:center}
 #toast.show{opacity:1}
+/* over the menus (secret codes and unlocks happen there), the message sits on top in a dark box near the bottom */
+#toast.over{z-index:9;top:auto;bottom:6%;padding:.8cqw 1.6cqw;background:rgba(8,6,6,.9);outline:.2cqw solid var(--amber)}
 #hurt{position:absolute;inset:0;pointer-events:none;opacity:0;box-shadow:inset 0 0 14cqw 3cqw rgba(200,20,10,.85)}
 #glow{position:absolute;inset:0;pointer-events:none;opacity:0;background:rgba(243,178,58,.22)}
 
@@ -2124,8 +2126,8 @@ const tMove = { fw: 0, st: 0 };
 let camZ = EYE, hz = HALF, camLift = 0; // camLift raises the camera during the orbital strike cutscene
 
 function toastMsg(msg) {
-  const t = $('toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastMsg.h); toastMsg.h = setTimeout(() => t.classList.remove('show'), 1800);
+  const t = $('toast'); t.textContent = msg; t.classList.add('show'); t.classList.toggle('over', !menu.hidden || !$('pilot').hidden);
+  clearTimeout(toastMsg.h); toastMsg.h = setTimeout(() => t.classList.remove('show'), t.classList.contains('over') ? 3500 : 1800);
 }
 function setWeapon(w) {
   if (w === P.weapon || !P.has[w]) return;
@@ -2379,8 +2381,8 @@ function damage(e, n, quiet) {
       if (!MAPS[mapIndex].arena) {
         P.unlockedNew = unlockNext();
         if (e.k.king) pilotUnlocked = true;
-        startCine(e); // the death cutscene, then the win screen (runs on game time, so pausing can't skip it)
       }
+      startCine(e); // the death cutscene, then the win screen (in the arena you just keep playing); runs on game time
     } else {
       // robots with a big gun sometimes drop it: recruits will grab it, or you can take its ammo
       if (e.gun && e.gun !== 'pistol' && Math.random() < 0.5) items.push({ type: 'drop', gun: e.gun, x: e.x + rand(-0.2, 0.2), y: e.y + rand(-0.2, 0.2), taken: false });
@@ -3013,6 +3015,7 @@ function updatePickups() {
 let cine = null;
 function startCine(boss) {
   if (cine && cine.orbital) { cine.bossAfter = boss; return; } // play it after the orbital strike cutscene
+  if (cine) return; // another boss's cutscene is already playing
   cine = { boss, t: 0, dur: 4.2, boomT: 0 };
   mouseDown = false; for (const k in keys) keys[k] = false;
   screenEl.classList.add('cine');
@@ -3085,7 +3088,7 @@ function cineStep(dt) {
   if (c.t > 2.4 && !c.roared) { c.roared = true; sfx.die(1); sfx.roar(1); }
   for (const p of puffs) p.t -= dt;
   puffs = puffs.filter(p => p.t > 0);
-  if (c.t >= c.dur) { cine = null; screenEl.classList.remove('cine'); endGame(true); }
+  if (c.t >= c.dur) { cine = null; screenEl.classList.remove('cine'); if (!MAPS[mapIndex].arena) endGame(true); }
 }
 function drawOrbital() {
   const c = cine, bar = H * 0.13 * Math.min(1, c.t / 0.5, (c.dur - c.t) / 0.6);
@@ -4018,13 +4021,13 @@ renderAlmanac();
 renderMaps();
 
 // ---------- input ----------
-// secret codes, typed on the title screen
+// secret codes, typed on the title screen; they show no message (only a sound or effect), so they stay secret
 let typed = '', superJump = false, danceT = 0;
 const CODES = {
-  creeper() { sfx.hiss(); setTimeout(() => { sfx.boom(1); menu.animate([{ filter: 'brightness(4)' }, { filter: 'none' }], 400); toastMsg('Sssss... BOOM! A creeper got too close'); }, 1400); },
-  dance() { danceT = 6; toastMsg('The horde hits a victory dance!'); },
-  'triple t'() { tungUnlocked = true; saveCrew(); sfx.tung(1); toastMsg('Unlocked: Tung Tung Tung Sahur skin! Open Recruits to use it'); },
-  wahoo() { superJump = !superJump; sfx.coin(); toastMsg(superJump ? 'Wahoo! Super jump is on' : 'Super jump is off'); },
+  creeper() { sfx.hiss(); setTimeout(() => { sfx.boom(1); menu.animate([{ filter: 'brightness(4)' }, { filter: 'none' }], 400); }, 1400); },
+  dance() { danceT = 6; },
+  'triple t'() { tungUnlocked = true; saveCrew(); sfx.tung(1); },
+  wahoo() { superJump = !superJump; sfx.coin(); },
 };
 addEventListener('keydown', e => {
   keys[e.code] = true;
