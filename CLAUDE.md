@@ -58,8 +58,9 @@ simple, warm, short and skimmable. Answer Bill directly when a message is clearl
   toggles, bug log; saved in localStorage `rust-sector-settings`), Mini games, Pilot edition. Pause has Quit game.
 - **Easter eggs**: per game each has a 1-in-3 chance to be hidden far out: ? block (Mario, +50 max health), diamond
   (Minecraft, full armor), rusty chest (Risk of Rain, fire 15% faster via `P.rate`), loot llama (Fortnite, ammo).
-  Codes typed on the title screen: `creeper`, `dance`, `wahoo` (super jump), `sahur` (summons the secret
-  Tung Tung Tung Sahur, kind `T`: a log with a bat, 450 health, knockback; also a 3% surprise per wave; never respawns).
+  Codes typed on the title screen: `creeper`, `dance`, `wahoo` (super jump), `triple t` (unlocks a Tung Tung Tung
+  Sahur skin for the recruits, saved in localStorage `rust-sector-tung`; drawn by `drawHuman` with `tung: true`).
+  Ernie asked for no Tung enemy.
 - **Recruits screen**: rename Skid/Moe and pick skin, helmet and uniform colours (`CREW_COLORS`, `buildRecruit`), saved in
   localStorage `rust-sector-recruits`. Zombies sometimes show their brain.
 
@@ -71,7 +72,15 @@ Q EMP · T spawn menu in the arena · M radar · N music · V shaders · Esc/P p
 
 - **Boss death cutscene**: `startCine`/`cineStep`/`drawCine` freeze the game, turn the camera to the boss, show
   movie bars and "<boss> IS DEAD", then `endGame(true)`.
-- **Sniper scope**: right mouse (hold) or F; `drawScope` magnifies the middle 3x. Zombies die with a synthesized "bleh".
+- **Death screen**: shows who killed you (`hitFrom` is set by every enemy attack, stored as `P.killer`), with its
+  Almanac picture and a tip from `KILLERS`. The title is random: Eaten 40%, You ded 30%, Get wrecked lol 30%.
+- **Zombie deaths**: regular zombies explode (`gibs`: burst, flying gib/bone puffs with `vz`) and leave a blood
+  puddle (`PUFF.pool`) instead of a body. Bosses keep their bodies and the cutscene.
+- **Tung skin** eyes glance around: extra `lookL`/`lookR` frames in `HUMAN_FRAMES`.
+- **Orbital railgun cutscene** (10 s): `startOrbital` → `orbitalStep`/`drawOrbital`; alert, lock-on + 3-2-1, camera rises
+  (`camLift`), beam, blast at 4.6 s (`railBlast`, 1000 damage within 9), shockwave rings, smoke, "TARGET ELIMINATED".
+  A boss killed by it gets its own cutscene afterwards (`cine.bossAfter`).
+- **Sniper scope**: Shift+Q or F toggles, right mouse holds; `drawScope` magnifies the middle 3x. Zombies die with a synthesized "bleh".
 - **Map names**: Dead End City, The Boneyard, Ghoul Harbor, The Necropolis, Test Arena.
 
 ## Bug log

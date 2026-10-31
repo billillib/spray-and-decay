@@ -65,7 +65,7 @@ body{height:100%;box-sizing:border-box;background:var(--bg);color:var(--ink);fon
 #kills{font-size:4cqw}
 #allyBox{left:2.2cqw;top:13cqw;gap:.7cqw}
 .ally{display:flex;align-items:center;gap:.8cqw}
-.ally .lbl{width:5.6cqw;color:var(--ally)}
+.ally .lbl{min-width:5.6cqw;max-width:13cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ally)}
 .ally .bar{width:9cqw;height:.7cqw}
 .ally .bar i{background:var(--ally)}
 .ally .gunTag{font-family:var(--f-display);font-size:1.05cqw;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
@@ -132,16 +132,21 @@ button{font:inherit}
 #pilot{position:absolute;inset:0;z-index:8;background:#000}
 #pilot iframe{width:100%;height:100%;border:0;display:block}
 #pilotClose{position:absolute;top:1cqw;right:1cqw;font-size:1.2cqw;padding:.6cqw 1.2cqw}
+.killer{display:grid;grid-template-columns:9cqw 1fr;gap:1.4cqw;align-items:center;max-width:58cqw;padding:1cqw 1.6cqw;background:rgba(0,0,0,.55);outline:.2cqw solid rgba(224,69,58,.55);text-align:left}
+.killer canvas{width:100%;aspect-ratio:1;image-rendering:pixelated}
+.killer b{display:block;font-family:var(--f-display);font-size:1.7cqw;letter-spacing:.06em;color:var(--hp);margin-bottom:.5cqw}
+.killer span{font-size:1.7cqw;line-height:1.15;color:var(--ink)}
 .tip{margin:0;font-family:var(--f-display);font-size:1.25cqw;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
 #menu:not(.title) .tip,#menu:not(.home) .tip{display:none}
 .crew{display:grid;grid-template-columns:1fr 1fr;gap:2cqw;width:80cqw}
-.crewCard{display:grid;grid-template-columns:14cqw 1fr;gap:1.4cqw;padding:1.4cqw;background:rgba(0,0,0,.5);outline:1px solid rgba(255,255,255,.12);text-align:left}
+.crewCard{min-width:0;display:grid;grid-template-columns:14cqw 1fr;gap:1.4cqw;padding:1.4cqw;background:rgba(0,0,0,.5);outline:1px solid rgba(255,255,255,.12);text-align:left}
 .crewCard canvas{width:100%;aspect-ratio:1;image-rendering:pixelated;background:radial-gradient(circle at 50% 70%,rgba(111,211,156,.25),transparent 70%)}
 .crewCard input[type=text]{font:inherit;font-family:var(--f-display);font-size:1.8cqw;width:100%;box-sizing:border-box;padding:.5cqw .8cqw;background:rgba(0,0,0,.6);color:var(--ink);border:.15cqw solid rgba(236,228,207,.4)}
 .swatches{display:flex;flex-wrap:wrap;gap:.6cqw;align-items:center;margin-top:.8cqw}
 .swatches span{font-family:var(--f-display);font-size:1.1cqw;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);width:7cqw}
 .swatches button{width:2.4cqw;height:2.4cqw;border:0;padding:0;cursor:pointer;outline:.15cqw solid rgba(0,0,0,.6)}
 .swatches button.on{outline:.3cqw solid var(--amber)}
+.btn.tungBtn{margin-top:1cqw;font-size:1.05cqw;padding:.6cqw 1cqw;letter-spacing:.08em}
 .settings{display:flex;flex-direction:column;gap:1.2cqw;width:44cqw}
 .settings label{display:grid;grid-template-columns:16cqw 1fr 5cqw;align-items:center;gap:1.2cqw;font-family:var(--f-display);font-size:1.4cqw;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-align:left}
@@ -247,6 +252,7 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
         <p class="eyebrow" id="mEyebrow">The dead have risen</p>
         <h1 id="mTitle">Spray and Decay</h1>
         <p class="tip" id="mTip"></p>
+        <div class="killer" id="mKiller" hidden><canvas id="mKillerPic" width="64" height="64"></canvas><div><b id="mKillerName"></b><span id="mKillerTip"></span></div></div>
         <p class="lede" id="mText">The city is overrun with zombies, and the ones you put down keep coming back. Pick a map and fight with your recruits Skid and Moe. At 30 kills the map's boss arrives. Beat it to unlock the next map and its boss.</p>
         <dl class="stats" id="mStats" hidden>
           <div><dt>Time</dt><dd id="sTime">0:00</dd></div>
@@ -291,7 +297,7 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
           <div><dt>E</dt><dd>Jump</dd></div>
           <div><dt>R / Shift</dt><dd>Sprint (4 seconds)</dd></div>
           <div><dt>1 – 8</dt><dd>Weapons</dd></div>
-          <div><dt>Right click / F</dt><dd>Sniper scope</dd></div>
+          <div><dt>Shift+Q / Right click / F</dt><dd>Sniper scope</dd></div>
           <div><dt>M</dt><dd>Radar</dd></div>
           <div><dt>V</dt><dd>Shaders on/off</dd></div>
           <div><dt>N</dt><dd>Music on/off</dd></div>
@@ -987,33 +993,6 @@ function drawShredder(g, frame, brain = false) {
   zArm(g, 42, 25, swing ? 52 : 48, swing ? 12 : 44, 4, null, skin, true);
   if (swing) { g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(6, 20, 8, 1); g.fillRect(50, 18, 8, 1); }
 }
-// SECRET: Tung Tung Tung Sahur, a wooden log with a big grin and a baseball bat
-function drawTung(g, frame) {
-  const wood = '#a8743e', dark = '#5a3a1a', bat = '#e0c080';
-  if (frame === 'dead') {
-    g.fillStyle = shade(g, 6, 46, wood); g.fillRect(6, 52, 40, 10); g.fillStyle = dark; for (let x = 10; x < 46; x += 7) g.fillRect(x, 53, 1, 8);
-    g.save(); g.translate(50, 58); g.rotate(-0.3); g.fillStyle = bat; g.fillRect(-2, -14, 4, 16); g.restore();
-    return;
-  }
-  const step = frame === 'walk1' ? 4 : frame === 'walk2' ? -4 : 0, swing = frame === 'shoot';
-  // skinny legs and arms
-  limb(g, 27, 50, 26 - step / 2, 62, 3, dark); limb(g, 37, 50, 38 + step / 2, 62, 3, dark);
-  limb(g, 20, 30, 12, 42, 3, dark);
-  // the log body: rounded, with grain lines and a sawn top
-  g.fillStyle = shade(g, 19, 45, wood, 1.25, 0.6); g.beginPath(); g.ellipse(32, 9, 13, 4, 0, 0, Math.PI * 2); g.fill();
-  g.fillRect(19, 9, 26, 43);
-  g.fillStyle = '#c89a5a'; g.beginPath(); g.ellipse(32, 9, 12, 3.4, 0, 0, Math.PI * 2); g.fill();
-  g.strokeStyle = dark; g.lineWidth = 0.8; g.beginPath(); g.ellipse(32, 9, 7, 2, 0, 0, Math.PI * 2); g.ellipse(32, 9, 3, 1, 0, 0, Math.PI * 2); g.stroke();
-  g.fillStyle = 'rgba(70,40,15,.6)'; for (const x of [22, 27, 39, 43]) g.fillRect(x, 14, 1, 36);
-  // the face: big round eyes and a huge grin
-  for (const ex of [27, 37]) { g.fillStyle = '#fff'; disc(g, ex, 22, 4); g.fillStyle = '#000'; disc(g, ex + (swing ? 0 : 0.8), 22.5, 2); }
-  g.fillStyle = '#000'; g.fillRect(23, 16, 7, 1.5); g.fillRect(34, 16, 7, 1.5);
-  g.fillStyle = '#3a1a0a'; g.beginPath(); g.ellipse(32, 32, 7, swing ? 4 : 2.5, 0, 0, Math.PI); g.fill();
-  g.fillStyle = '#fff'; g.fillRect(27, 32, 10, 1.2);
-  // the bat: resting on the shoulder, or swung right at you
-  if (swing) { limb(g, 44, 30, 52, 22, 3, dark); g.save(); g.translate(52, 22); g.rotate(-0.6); g.fillStyle = bat; g.fillRect(-2, -20, 5, 22); g.fillRect(-3, -22, 7, 6); g.restore(); g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(56, 4, 6, 1); g.fillRect(58, 9, 5, 1); }
-  else { limb(g, 44, 30, 50, 40, 3, dark); g.save(); g.translate(50, 40); g.rotate(-0.25); g.fillStyle = bat; g.fillRect(-2, -26, 4, 28); g.fillRect(-3, -28, 6, 7); g.restore(); }
-}
 // a puker: a swollen, slow zombie that throws up thick black-green bile; it blinds you if it hits
 function drawPuker(g, frame) {
   const skin = '#8a9a6a', shirt = '#5a5a3a', bile = '#3a4a10', eye = '#ffd020';
@@ -1105,8 +1084,15 @@ function drawKing(g, frame) {
   if (shoot) { muzzle(g, 9, 44, 5); muzzle(g, 55, 44, 5); }
   if (frame === 'punch') drawFist(g, skin);
 }
-function drawHuman(g, { skin, helmet, kit = '#5b6b45', frame, gun = 'rifle' }) {
+// tung: the secret Tung Tung Tung Sahur skin, a wooden log with big eyes and a grin (unlocked with the code "triple t")
+function drawHuman(g, { skin, helmet, kit = '#5b6b45', frame, gun = 'rifle', tung = false }) {
+  if (tung) { skin = '#7a4a22'; kit = '#a8743e'; }
   const pants = tint(kit, 0.82), vest = tint(kit, 0.65), boot = '#2a2620';
+  if (frame === 'dead' && tung) {
+    g.fillStyle = shade(g, 8, 48, kit); g.fillRect(8, 52, 40, 10); g.fillStyle = '#5a3a1a'; for (let x = 12; x < 48; x += 7) g.fillRect(x, 53, 1, 8);
+    g.fillStyle = '#fff'; disc(g, 12, 55, 2); disc(g, 12, 60, 2); g.fillStyle = '#1b1b1d'; g.fillRect(20, 49, 24, 3);
+    return;
+  }
   if (frame === 'dead') {
     g.fillStyle = kit; g.fillRect(12, 54, 32, 8);
     g.fillStyle = pants; g.fillRect(40, 55, 10, 6);
@@ -1118,13 +1104,42 @@ function drawHuman(g, { skin, helmet, kit = '#5b6b45', frame, gun = 'rifle' }) {
   }
   // walk cycle: left foot down, right leg passing, right foot down, left leg passing.
   // lift raises a foot (positive) or plants it a pixel forward (negative); the body rises as a leg passes.
-  const [lLift, rLift, bob, sway] = HUMAN_POSE[frame] || HUMAN_POSE.idle;
+  const [lLift, rLift, bob, sway] = HUMAN_POSE[frame] || HUMAN_POSE.idle; // lookL/lookR stand like idle
   g.save(); g.translate(0, bob);
   const leg = (x, lift) => {
     const foot = 56 - lift, swing = lift > 2 ? 1 : 0;
     g.fillStyle = pants; g.fillRect(x + swing, 42, 7, foot - 42 - bob);
     g.fillStyle = boot; g.fillRect(x - 1 + swing, foot - bob, 9, lift > 2 ? 6 : 7);
   };
+  if (tung) {
+    // Tung Tung Tung Sahur: a tall rounded wooden body, thin dark limbs, huge eyes under thick brows,
+    // a sly grin, and his baseball bat in the other hand. The eyes look around (left, right) by frame.
+    const look = frame === 'lookL' || frame === 'walk1' ? -1.3 : frame === 'lookR' || frame === 'walk3' ? 1.3 : 0;
+    limb(g, 27, 42, 27 + lLift * 0.3, 56 - lLift, 2.6, '#4a2a12'); limb(g, 37, 42, 37 - rLift * 0.3, 56 - rLift, 2.6, '#4a2a12');
+    g.fillStyle = '#3a2210'; g.fillRect(24 + lLift * 0.3, 55 - lLift, 5, 2.5); g.fillRect(35 - rLift * 0.3, 55 - rLift, 5, 2.5);
+    // the bat, held upright in his left hand behind the body
+    limb(g, 18, 29, 14, 37, 2.6, '#4a2a12');
+    g.fillStyle = shade(g, 11, 17, '#e0b878'); g.beginPath(); g.moveTo(13, 38); g.lineTo(15, 38); g.lineTo(17, 6); g.quadraticCurveTo(14, 2, 11, 6); g.fill();
+    g.fillStyle = '#7a4a22'; g.fillRect(12.6, 36, 3, 4);
+    // the body: a rounded-top cylinder of light wood
+    const body = () => { g.beginPath(); g.moveTo(21, 44); g.lineTo(21, 11); g.quadraticCurveTo(21, 2, 32, 2); g.quadraticCurveTo(43, 2, 43, 11); g.lineTo(43, 44); g.closePath(); };
+    g.fillStyle = shade(g, 21, 43, '#c8955a', 1.25, 0.62); body(); g.fill();
+    g.save(); body(); g.clip();
+    g.strokeStyle = 'rgba(90,50,20,.45)'; g.lineWidth = 0.8;
+    for (const [x, w] of [[24, 1.5], [29, -1], [35, 1.2], [40, -1.4]]) { g.beginPath(); g.moveTo(x, 4); g.quadraticCurveTo(x + w, 24, x, 44); g.stroke(); }
+    g.fillStyle = 'rgba(90,50,20,.6)'; g.beginPath(); g.ellipse(38, 36, 1.6, 2.4, 0, 0, Math.PI * 2); g.fill();
+    g.restore();
+    // face: thick angled brows, big round eyes with darting pupils, a small nose and a sideways grin
+    g.fillStyle = '#1a0e06'; g.beginPath(); g.moveTo(24, 11); g.lineTo(31, 12.5); g.lineTo(31, 14); g.lineTo(24, 13); g.fill();
+    g.beginPath(); g.moveTo(40, 11); g.lineTo(33, 12.5); g.lineTo(33, 14); g.lineTo(40, 13); g.fill();
+    for (const ex of [27.5, 36.5]) {
+      g.fillStyle = '#fff'; disc(g, ex, 18, 3.7); g.strokeStyle = '#3a2210'; g.lineWidth = 0.6; g.beginPath(); g.arc(ex, 18, 3.7, 0, Math.PI * 2); g.stroke();
+      g.fillStyle = '#000'; disc(g, ex + look, 18.4, 1.7); g.fillStyle = '#fff'; g.fillRect(ex + look - 0.9, 17.2, 0.8, 0.8);
+    }
+    g.fillStyle = 'rgba(90,50,20,.7)'; g.fillRect(31.5, 21, 1.5, 3);
+    g.strokeStyle = '#2a1408'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(26, 26); g.quadraticCurveTo(32, 30.5, 38.5, 25.5); g.stroke();
+    g.fillStyle = '#fff'; g.fillRect(29, 27.2, 6, 0.9);
+  } else {
   leg(24, lLift); leg(33, rLift);
   g.fillStyle = kit; g.fillRect(22, 22, 20, 21);
   g.fillStyle = vest; g.fillRect(24, 24, 16, 14);
@@ -1137,6 +1152,7 @@ function drawHuman(g, { skin, helmet, kit = '#5b6b45', frame, gun = 'rifle' }) {
   g.fillStyle = helmet; g.fillRect(24, 4, 16, 6); g.fillRect(23, 8, 18, 3);
   g.fillStyle = 'rgba(255,255,255,.15)'; g.fillRect(26, 5, 6, 2);
   g.fillStyle = boot; g.fillRect(26, 11, 1, 7); g.fillRect(37, 11, 1, 7);
+  }
   // arms and rifle rock gently against the stride
   g.translate(0, sway);
   g.fillStyle = kit; g.fillRect(16, 24, 6, 13); g.fillRect(42, 24, 6, 11);
@@ -1173,7 +1189,7 @@ function drawHuman(g, { skin, helmet, kit = '#5b6b45', frame, gun = 'rifle' }) {
 const HUMAN_POSE = { idle: [0, 0, 0, 0], walk1: [-1, 4, 0, 1], walk2: [0, 6, -1, 0], walk3: [4, -1, 0, -1], walk4: [6, 0, -1, 0] };
 const FRAMES = ['idle', 'walk1', 'walk2', 'shoot', 'dead'];
 const frames = (draw, list = FRAMES) => Object.fromEntries(list.map(f => [f, toTex(sprite(g => draw(g, f)))]));
-const HUMAN_FRAMES = ['idle', 'walk1', 'walk2', 'walk3', 'walk4', 'shoot', 'dead'];
+const HUMAN_FRAMES = ['idle', 'walk1', 'walk2', 'walk3', 'walk4', 'shoot', 'dead', 'lookL', 'lookR'];
 // grunts and heavies each carry one of the player's five weapons, picked when they spawn
 const ENEMY_GUNS = ['pistol', 'shotgun', 'flamer', 'minigun', 'launcher'];
 const GRUNT_LOOK = { skin: '#7d9468', shirt: '#3e4c60', pants: '#3a3530', eye: '#ff2418', hair: '#1a1812' };
@@ -1188,8 +1204,6 @@ const KINDS = {
     tex: frames(drawDrone) },
   B: { name: 'butcher', title: 'The Butcher', hp: 1200, r: 0.62, scale: 1.7, h: 1.6, speed: 1.0, boss: true, cd: [2.2, 3.2],
     punch: true, tex: frames(drawBoss, [...FRAMES, 'punch']) },
-  T: { name: 'tung tung tung sahur', title: 'Tung Tung Tung Sahur', hp: 450, r: 0.36, scale: 1.25, h: 1.2, speed: 2.6, melee: true, tung: true, reach: 1.5, dmg: [16, 22], cd: [0.9, 1.3],
-    tex: frames(drawTung) },
   u: { name: 'puker', hp: 90, r: 0.4, scale: 1.1, h: 1.0, speed: 1.3, melee: true, blind: true, reach: 3.2, dmg: [4, 7], cd: [1.8, 2.6],
     tex: frames(drawPuker) },
   m: { name: 'runner', hp: 55, r: 0.34, scale: 1, h: 0.95, speed: 3.6, melee: true, reach: 1.3, dmg: [10, 15], cd: [0.7, 1.1],
@@ -1213,7 +1227,9 @@ const ALLY_GUNS = ['rifle', 'shotgun', 'flamer', 'launcher', 'minigun']; // weak
 const GUN_NAMES = { rifle: 'Rifle', shotgun: 'Shotgun', flamer: 'Flamethrower', launcher: 'Grenade launcher', minigun: 'Minigun' };
 // recruits can be customised (name, skin, helmet, uniform) on the Recruits screen; saved in this browser
 const RECRUIT_KEY = 'rust-sector-recruits';
-try { (JSON.parse(localStorage.getItem(RECRUIT_KEY) || '[]')).forEach((c, i) => { if (RECRUITS[i] && c) { RECRUITS[i].name = String(c.name || RECRUITS[i].name).slice(0, 10); Object.assign(RECRUITS[i].look, c.look); } }); } catch (e) {}
+let tungUnlocked = false;
+try { tungUnlocked = localStorage.getItem('rust-sector-tung') === 'yes'; } catch (e) {}
+try { (JSON.parse(localStorage.getItem(RECRUIT_KEY) || '[]')).forEach((c, i) => { if (RECRUITS[i] && c) { RECRUITS[i].name = String(c.name || RECRUITS[i].name).slice(0, 22); Object.assign(RECRUITS[i].look, c.look); } }); } catch (e) {}
 function buildRecruit(r) {
   r.guns = Object.fromEntries(ALLY_GUNS.map(gun => [gun, frames((g, f) => drawHuman(g, { ...r.look, gun, frame: f }), HUMAN_FRAMES)]));
   r.tex = r.guns.rifle;
@@ -1363,6 +1379,12 @@ ITEM.llama = { scale: 0.62, power: true, tex: toTex(sprite(g => {
   g.fillStyle = '#ff7ac8'; g.fillRect(8, 30, 7, 4);
 })) };
 const PUFF = {
+  smoke: toTex(sprite(g => { for (const [x, y, r, c] of [[32, 36, 26, 'rgba(40,40,48,.7)'], [24, 30, 16, 'rgba(70,70,80,.7)'], [40, 28, 14, 'rgba(60,60,70,.7)']]) { g.fillStyle = c; disc(g, x, y, r); } })),
+  // exploding zombies: the burst, flying chunks, and the puddle left behind (dark reds so they don't glow)
+  burst: toTex(sprite(g => { g.fillStyle = '#3a0404'; disc(g, 32, 32, 30); g.fillStyle = '#7a0c0c'; disc(g, 32, 32, 24); g.fillStyle = '#a81a14'; for (let k = 0; k < 10; k++) { const a = k * 0.63; disc(g, 32 + Math.cos(a) * 18, 32 + Math.sin(a) * 18, 6); } g.fillStyle = '#c03020'; disc(g, 30, 30, 9); })),
+  gib: toTex(sprite(g => { g.fillStyle = '#5a0a0a'; disc(g, 32, 34, 20); g.fillStyle = '#8a3a3a'; disc(g, 28, 30, 13); g.fillStyle = '#6a7a50'; disc(g, 38, 38, 8); })),
+  bone: toTex(sprite(g => { g.fillStyle = '#d6ccb0'; g.fillRect(14, 28, 36, 8); disc(g, 14, 27, 6); disc(g, 14, 37, 6); disc(g, 50, 27, 6); disc(g, 50, 37, 6); })),
+  pool: toTex(sprite(g => { g.fillStyle = '#3a0404'; g.beginPath(); g.ellipse(32, 60, 30, 4, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#5a0808'; g.beginPath(); g.ellipse(28, 60, 18, 2.6, 0, 0, Math.PI * 2); g.fill(); g.fillStyle = '#d6ccb0'; g.fillRect(40, 58, 6, 2); g.fillStyle = '#6a1a1a'; g.fillRect(14, 58, 5, 3); })),
   // a spitter's acid glob
   bile: toTex(sprite(g => { g.fillStyle = '#1e2a08'; disc(g, 32, 32, 22); g.fillStyle = '#4a5a14'; disc(g, 30, 30, 15); g.fillStyle = '#8a9a30'; disc(g, 27, 27, 5); })),
   acid: toTex(sprite(g => { g.fillStyle = '#3a6a10'; disc(g, 32, 32, 24); g.fillStyle = '#8ad82a'; disc(g, 30, 30, 17); g.fillStyle = '#e8ff9a'; disc(g, 27, 26, 6); })),
@@ -1863,7 +1885,7 @@ function newGame() {
   }
   Object.assign(P, { z: 0, vz: 0, onGround: true, pitch: 0, hp: 100, maxHp: 100, bullets: 60, shells: 0, fuel: 0, weapon: 'pistol',
     has: { pistol: true, shotgun: false, flamer: false, minigun: false, bazooka: false, rifle: false, sniper: false, railgun: false }, cd: 0, kick: 0, flash: 0, hurt: 0, glow: 0, bob: 0, raise: 1,
-    stamina: 4, armor: 0, lastHit: 0, zone: -1, bossSpawned: false, unlockedNew: null, nades: 5, nadeLoaded: true, nadeReload: 0, spin: 0, spinAnim: 0, emps: 2, empCd: 0, rockets: 0, rounds: 0, cells: 0, railFlash: 0, winT: 0, rate: 1, blind: 0, acid: 0 });
+    stamina: 4, armor: 0, lastHit: 0, zone: -1, bossSpawned: false, unlockedNew: null, nades: 5, nadeLoaded: true, nadeReload: 0, spin: 0, spinAnim: 0, emps: 2, empCd: 0, rockets: 0, rounds: 0, cells: 0, railFlash: 0, winT: 0, rate: 1, blind: 0, acid: 0, killer: null });
   // the three newest guns are hidden around each map: the rifle close by, the sniper further, the railgun far away
   if (!MAPS[mapIndex].arena) for (const [type, near, far] of [['rifle', 6, 16], ['sniper', 16, 34], ['railgun', 36, 70]]) {
     const s = findSpot(-1, near, far, false); if (s) items.push({ type, x: s.x, y: s.y, taken: false });
@@ -2021,7 +2043,7 @@ const sfx = {
   puke(v) { burst(0.6, 700, 150, 0.5 * v); tone('sawtooth', 140, 60, 0.5, 0.2 * v); },
   // tung tung tung... SAHUR! (three wooden knocks, then a two-note call)
   tung(v) { for (let i = 0; i < 3; i++) { tone('sine', 820, 520, 0.08, 0.6 * v, i * 0.24); burst(0.05, 3000, 1200, 0.3 * v, 'bandpass'); } tone('triangle', 330, 330, 0.18, 0.35 * v, 0.78); tone('triangle', 247, 220, 0.4, 0.35 * v, 0.98); },
-  bonk(v) { tone('sine', 520, 180, 0.15, 0.8 * v); burst(0.1, 2500, 600, 0.5 * v, 'bandpass'); },
+  splat(v) { burst(0.35, 1200, 150, 0.7 * v); tone('sine', 110, 40, 0.25, 0.6 * v); burst(0.15, 4000, 1500, 0.25 * v, 'bandpass'); },
   hiss() { burst(1.4, 6000, 3000, 0.25, 'highpass'); },
   jump() { tone('sine', 220, 330, 0.08, 0.15); },
   land() { burst(0.08, 600, 120, 0.25); },
@@ -2099,7 +2121,7 @@ let state = 'menu', showMap = true;
 const keys = {};
 let mouseDown = false, mouseDX = 0, mouseDY = 0, overScreen = false, mouseNX = 0, mouseNY = 0, touchTurn = 0, touchPitch = 0, touchFire = false, touchJump = false;
 const tMove = { fw: 0, st: 0 };
-let camZ = EYE, hz = HALF;
+let camZ = EYE, hz = HALF, camLift = 0; // camLift raises the camera during the orbital strike cutscene
 
 function toastMsg(msg) {
   const t = $('toast'); t.textContent = msg; t.classList.add('show');
@@ -2148,13 +2170,6 @@ function spawnWave(zone) {
   }
   const extra = P.has.railgun && Math.random() < 0.4 ? 'cells' : P.has.sniper ? 'rounds' : null, es = extra && findSpot(zone, 4, 999, false);
   if (es) items.push({ type: extra, x: es.x, y: es.y, taken: false });
-  if (Math.random() < 0.03) spawnTung();
-}
-function spawnTung() {
-  const s = findSpot(-1, 9, 18, true) || findSpot(-1, 6, 24, false);
-  if (!s) return;
-  const e = makeEnemy('T', s.x, s.y); e.alert = true; enemies.push(e);
-  sfx.tung(1); toastMsg('Tung tung tung... SAHUR!');
 }
 function spawnBoss() {
   const s = findSpot(-1, 11, 18, true) || findSpot(-1, 8, 24, false);
@@ -2217,8 +2232,7 @@ function fireRail(w) {
     if (along > 0 && along < d && Math.abs(vx * dy - vy * dx) < e.k.r + 0.3) d = along;
   }
   d = Math.max(1.5, d - 0.3);
-  strikes.push({ x: P.x + dx * d, y: P.y + dy * d, t: 1.1 });
-  toastMsg('Orbital strike incoming!');
+  startOrbital(P.x + dx * d, P.y + dy * d);
 }
 // spitter acid: flies in an arc to where the target was, then splashes
 function updateSpits(dt) {
@@ -2230,9 +2244,23 @@ function updateSpits(dt) {
     if (sp.t > 0) continue;
     sp.dead = true;
     for (let i = 0; i < 5; i++) puffs.push({ x: sp.tx + rand(-0.3, 0.3), y: sp.ty + rand(-0.3, 0.3), z: Math.max(0, sp.tz - 0.4 + rand(-0.2, 0.2)), t: 0.45, life: 0.45, vx: 0, vy: 0, kind: 'acid' });
+    hitFrom = sp.from;
     if (sp.tgt && (sp.tgt === P || sp.tgt.state !== 'down')) { sp.tgt === P ? hurtPlayer(sp.dmg) : hurtAlly(sp.tgt, sp.dmg); if (sp.tgt === P) P.acid = 1; }
   }
   spits = spits.filter(sp => !sp.dead);
+}
+function updatePuffs(dt) {
+  for (const p of puffs) {
+    p.t -= dt;
+    if (p.vx || p.vy) {
+      const nx = p.x + p.vx * dt, ny = p.y + p.vy * dt;
+      if (solid(nx, ny)) p.vx = p.vy = 0; else { p.x = nx; p.y = ny; }
+    }
+    if (p.kind === 'flame') p.z += dt * 0.3;
+    if (p.kind === 'smoke') p.z += dt * 0.25;
+    if (p.vz !== undefined) { p.vz -= 11 * dt; p.z = Math.max(0, p.z + p.vz * dt); if (p.z === 0) { p.vx *= 0.8; p.vy *= 0.8; } }
+  }
+  puffs = puffs.filter(p => p.t > 0);
 }
 function updateStrikes(dt) {
   for (const st of strikes) {
@@ -2344,6 +2372,7 @@ function damage(e, n, quiet) {
   const v = clamp(1.2 - Math.hypot(e.x - P.x, e.y - P.y) / 14, 0.15, 1);
   if (e.hp <= 0) {
     e.state = 'dead'; e.burn = 0; stats.kills++; sfx.die(v);
+    if (!e.k.boss) gibs(e, v);
     if (e.k.boss) {
       stats.bosses++;
       toastMsg(e.k.title + ' destroyed');
@@ -2356,8 +2385,7 @@ function damage(e, n, quiet) {
       // robots with a big gun sometimes drop it: recruits will grab it, or you can take its ammo
       if (e.gun && e.gun !== 'pistol' && Math.random() < 0.5) items.push({ type: 'drop', gun: e.gun, x: e.x + rand(-0.2, 0.2), y: e.y + rand(-0.2, 0.2), taken: false });
       else if (Math.random() < 0.45) items.push({ type: 'clip', x: e.x + rand(-0.2, 0.2), y: e.y + rand(-0.2, 0.2), taken: false });
-      if (!MAPS[mapIndex].arena && !e.k.tung) respawns.push({ code: e.code || 'g', t: rand(14, 22) });
-      if (e.k.tung) toastMsg('You beat Tung Tung Tung Sahur!');
+      if (!MAPS[mapIndex].arena) respawns.push({ code: e.code || 'g', t: rand(14, 22) });
       if (!MAPS[mapIndex].arena && stats.kills >= bossAt() && !P.bossSpawned) { P.bossSpawned = true; spawnBoss(); }
       else if (!P.bossSpawned && (bossAt() - stats.kills === 10 || bossAt() - stats.kills === 5)) toastMsg((bossAt() - stats.kills) + ' more until ' + bossName(true));
     }
@@ -2367,8 +2395,21 @@ function damage(e, n, quiet) {
   }
 }
 
+// hitFrom is the zombie whose attack is landing right now, so the death screen can say who got you
+let hitFrom = null;
+// a regular zombie bursts apart when it dies: a blood splash, then chunks of flesh and bone that fly and fall
+function gibs(e, v) {
+  sfx.splat(v);
+  const z = e.z + e.k.h * 0.5;
+  puffs.push({ x: e.x, y: e.y, z: z - 0.3, t: 0.35, life: 0.35, vx: 0, vy: 0, kind: 'burst' });
+  for (let i = 0; i < 12; i++) {
+    const a = Math.random() * Math.PI * 2, sp = rand(1.5, 4.5);
+    puffs.push({ x: e.x, y: e.y, z: z + rand(-0.2, 0.3), t: rand(0.6, 1.1), life: 1.1, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, vz: rand(1.5, 4), kind: i % 3 ? 'gib' : 'bone' });
+  }
+}
 function hurtPlayer(n) {
   if (state !== 'play') return;
+  if (hitFrom) P.killer = { code: hitFrom.code, gun: hitFrom.gun };
   if (P.armor > 0) { const soak = Math.min(P.armor, n * 0.6); P.armor -= soak; n -= soak; }
   P.hp -= n; P.hurt = Math.min(1, P.hurt + 0.55); P.lastHit = 0; sfx.hurt();
   if (P.hp <= 0) { P.hp = 0; endGame(false); }
@@ -2397,7 +2438,7 @@ function launchVolley(e, t, offsets = [-0.13, 0.13]) {
   sfx.launch(clamp(1.4 - pd / 16, 0.15, 1));
   for (const off of offsets) {
     const a = Math.atan2(t.y - e.y, t.x - e.x) + off;
-    missiles.push({ x: e.x + Math.cos(a) * 0.7, y: e.y + Math.sin(a) * 0.7, vx: Math.cos(a) * 6.5, vy: Math.sin(a) * 6.5, t: 5 });
+    missiles.push({ x: e.x + Math.cos(a) * 0.7, y: e.y + Math.sin(a) * 0.7, vx: Math.cos(a) * 6.5, vy: Math.sin(a) * 6.5, t: 5, from: e });
   }
 }
 // Warlord: missile volleys. Overseer: missiles or a rapid plasma burst. Crusher: a ground stomp (it charges separately).
@@ -2410,6 +2451,7 @@ function bossAttack(e, t) {
   launchVolley(e, t, spread);
 }
 function plasmaShot(e) {
+  hitFrom = e;
   const t = e.tgt;
   if (!t || (t !== P && t.state === 'down')) { e.burst = 0; return; }
   sfx.plasma(clamp(1.4 - Math.hypot(P.x - e.x, P.y - e.y) / 16, 0.15, 1));
@@ -2429,6 +2471,7 @@ function startCharge(e, t) {
   sfx.roar(clamp(1.4 - Math.hypot(P.x - e.x, P.y - e.y) / 16, 0.2, 1));
 }
 function chargeStep(e, dt) {
+  hitFrom = e;
   e.charging -= dt;
   const s = (e.enraged ? 8 : 6.5) * dt, ox = e.x, oy = e.y;
   move(e, e.cdx * s, e.cdy * s, 0.5);
@@ -2443,23 +2486,23 @@ function chargeStep(e, dt) {
 }
 // a saw-blade slash only lands if the target is still within reach (and not standing up on something)
 function meleeHit(e, t, pd) {
+  hitFrom = e;
   if (e.k.blind) {
     sfx.puke(clamp(1.3 - pd / 12, 0.15, 1));
     const a = Math.atan2((t || P).y - e.y, (t || P).x - e.x);
     for (let i = 0; i < 8; i++) { const b = a + rand(-0.2, 0.2), s = rand(3, 6); puffs.push({ x: e.x + Math.cos(b) * 0.4, y: e.y + Math.sin(b) * 0.4, z: 0.8, t: 0.5, life: 0.5, vx: Math.cos(b) * s, vy: Math.sin(b) * s, kind: 'bile' }); }
-  } else if (e.k.tung) sfx.bonk(clamp(1.3 - pd / 12, 0.15, 1));
-  else sfx.slash(clamp(1.3 - pd / 12, 0.15, 1));
+  } else sfx.slash(clamp(1.3 - pd / 12, 0.15, 1));
   if (!t || (t !== P && t.state === 'down')) return;
   const d = Math.hypot(t.x - e.x, t.y - e.y);
   if (d > e.k.reach + 0.4 || (t === P && P.z > 0.9)) return;
   const n = rand(e.k.dmg[0], e.k.dmg[1]);
   t === P ? hurtPlayer(n) : hurtAlly(t, n);
-  if (e.k.tung) { const dx = t.x - e.x, dy = t.y - e.y, dd = Math.hypot(dx, dy) || 1; t === P ? (movePlayer(dx / dd * 1.4, dy / dd * 1.4), P.vz = 3, P.onGround = false) : move(t, dx / dd * 1.2, dy / dd * 1.2, 0.3); }
   if (e.k.blind && t === P) { P.blind = 3.5; toastMsg('Puked on! Wipe your eyes...'); }
   else if (!e.k.blind) spawnPuff(e.x + (t.x - e.x) * 0.6, e.y + (t.y - e.y) * 0.6, 'spark', 0.4);
 }
 // a knockback punch: it only lands up close, and sends you flying
 function punch(e, t) {
+  hitFrom = e;
   e.punching = 0.4;
   sfx.punch(clamp(1.4 - Math.hypot(P.x - e.x, P.y - e.y) / 14, 0.2, 1));
   if (t !== P && t.state === 'down') return;
@@ -2508,6 +2551,7 @@ function kingSummon(e) {
 }
 // robots fire whatever gun they carry: the same five weapons the player can use
 function enemyFire(e, t, pd) {
+  hitFrom = e;
   const vol = clamp(1.3 - pd / 12, 0.15, 1), gun = e.gun || 'pistol';
   if (!t || (t !== P && t.state === 'down')) return;
   if (e.k.sentinel) {
@@ -2516,7 +2560,7 @@ function enemyFire(e, t, pd) {
     sfx.sniper(clamp(1.4 - pd / 20, 0.25, 1)); sfx.drone(clamp(1.4 - pd / 20, 0.25, 1));
     const hit = sight(e, t, 26) >= 0, tz = t === P ? camZ - 0.15 : 0.6;
     const tx = t.x + (hit ? 0 : rand(-1.2, 1.2)), ty = t.y + (hit ? 0 : rand(-1.2, 1.2)), d = Math.hypot(tx - e.x, ty - e.y) || 1;
-    spits.push({ x: e.x, y: e.y, z: e.z + 1.25, tx, ty, tz, t: d / 22, life: d / 22, sx: e.x, sy: e.y, sz: e.z + 1.25, tgt: hit ? t : null, dmg: rand(e.k.dmg[0], e.k.dmg[1]) });
+    spits.push({ from: e, x: e.x, y: e.y, z: e.z + 1.25, tx, ty, tz, t: d / 22, life: d / 22, sx: e.x, sy: e.y, sz: e.z + 1.25, tgt: hit ? t : null, dmg: rand(e.k.dmg[0], e.k.dmg[1]) });
     return;
   }
   if (gun === 'launcher') return launchVolley(e, t, [0]);
@@ -2535,6 +2579,7 @@ function enemyFire(e, t, pd) {
   if (Math.random() < chance) { const n = rand(e.k.dmg[0], e.k.dmg[1]) * (gun === 'shotgun' ? 1.8 : 1); t === P ? hurtPlayer(n) : hurtAlly(t, n); }
 }
 function mgShot(e) {
+  hitFrom = e;
   const t = e.tgt;
   if (!t || (t !== P && t.state === 'down')) { e.mg = 0; return; }
   sfx.enemyMinigun(clamp(1.3 - Math.hypot(P.x - e.x, P.y - e.y) / 12, 0.15, 1));
@@ -2542,6 +2587,7 @@ function mgShot(e) {
   if (sd >= 0 && Math.random() < clamp(0.7 - sd * 0.05, 0.15, 0.7)) { const n = rand(e.k.dmg[0], e.k.dmg[1]) * 0.55; t === P ? hurtPlayer(n) : hurtAlly(t, n); }
 }
 function stomp(e) {
+  hitFrom = e;
   const pd = Math.hypot(P.x - e.x, P.y - e.y), R = 4.2;
   sfx.boom(clamp(1.4 - pd / 14, 0.2, 1));
   for (let i = 0; i < 8; i++) {
@@ -2645,7 +2691,7 @@ function updateMissiles(dt) {
     const nx = m.x + m.vx * dt, ny = m.y + m.vy * dt;
     let hit = m.t <= 0 || solid(nx, ny) || (P.z < 0.8 && Math.hypot(nx - P.x, ny - P.y) < 0.45);
     for (const a of allies) if (a.state !== 'down' && Math.hypot(nx - a.x, ny - a.y) < 0.45) hit = true;
-    if (hit) { explode(m.x, m.y); m.dead = true; }
+    if (hit) { hitFrom = m.from; explode(m.x, m.y); m.dead = true; }
     else { m.x = nx; m.y = ny; if (Math.random() < dt * 30) spawnFlame(m.x, m.y, 0.32, 0, 0, 0.25); }
   }
   missiles = missiles.filter(m => !m.dead);
@@ -2682,7 +2728,6 @@ function updateEnemies(dt) {
       if (Math.random() < dt * 9) spawnFlame(e.x + rand(-0.2, 0.2), e.y + rand(-0.2, 0.2), e.z + rand(0.05, 0.5), 0, 0, 0.35);
     }
     if (e.punching > 0) e.punching -= dt;
-    if (e.k.tung && e.alert && (e.chantT = (e.chantT ?? 0) - dt) <= 0) { e.chantT = 3.2; sfx.tung(clamp(1.4 - Math.hypot(P.x - e.x, P.y - e.y) / 18, 0.2, 1)); }
     if (e.k.king) {
       const ph = e.hp < e.k.hp / 3 ? 3 : e.hp < e.k.hp * 2 / 3 ? 2 : 1;
       if (ph > (e.phase || 1)) {
@@ -2967,11 +3012,66 @@ function updatePickups() {
 // a big title says it's dead, then the win screen. Everything else freezes while it plays.
 let cine = null;
 function startCine(boss) {
+  if (cine && cine.orbital) { cine.bossAfter = boss; return; } // play it after the orbital strike cutscene
   cine = { boss, t: 0, dur: 4.2, boomT: 0 };
   mouseDown = false; for (const k in keys) keys[k] = false;
   screenEl.classList.add('cine');
 }
+// Orbital railgun cutscene (10 seconds): movie bars and an alert, the satellite locks on with a 3-2-1 countdown
+// while the camera rises, the beam comes down, a massive blast with shockwave rings shakes everything,
+// then the smoke clears and it counts what got vaporized. The game is frozen while it plays.
+function startOrbital(x, y) {
+  cine = { orbital: true, x, y, t: 0, dur: 10, beeped: 0, blown: false, kills: stats.kills, baseA: null };
+  strikes.push({ x, y, t: 0.4 }); // the marker (its size comes from t; strikes don't tick during the cutscene)
+  mouseDown = false; for (const k in keys) keys[k] = false;
+  screenEl.classList.add('cine');
+  sfx.alarm();
+}
+function railBlast(x, y, R) {
+  for (const e of enemies) if (e.state !== 'dead' && Math.hypot(e.x - x, e.y - y) < R) damage(e, 1000);
+}
+function orbitalStep(dt) {
+  const c = cine; c.t += dt;
+  // turn to face the target, then hold steady (apart from the shaking)
+  if (c.t < 3.5) {
+    const want = Math.atan2(c.y - P.y, c.x - P.x), da = ((want - P.a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+    P.a += da * Math.min(1, dt * 3); P.pitch += (-18 * SC - P.pitch) * Math.min(1, dt * 2);
+  } else if (c.baseA === null) { c.baseA = P.a; c.basePitch = P.pitch; }
+  // the camera rises above the rooftops for the blast, then comes back down
+  camLift = c.t < 4 ? 2.6 * Math.min(1, c.t / 4) ** 2 : c.t < 8 ? 2.6 : 2.6 * Math.max(0, 1 - (c.t - 8) / 1.8);
+  // countdown beeps at 1.5, 2.5 and 3.5 seconds
+  for (const at of [1.5, 2.5, 3.5]) if (c.t >= at && c.beeped < at) { c.beeped = at; sfx.lock(1); tone('square', 1200, 1200, 0.12, 0.3); }
+  if (c.t >= 4 && !c.beam) { c.beam = true; sfx.zap(1); sfx.launch(1); puffs.push({ x: c.x, y: c.y, z: 0, t: 0.9, life: 0.9, vx: 0, vy: 0, kind: 'beam' }); }
+  if (c.t >= 4.6 && !c.blown) {
+    // the detonation: a huge blast, rings of fire rolling outwards, smoke and debris; everything within 9 steps takes 1000 damage
+    c.blown = true; P.railFlash = 1.6;
+    strikes = strikes.filter(st => st.x !== c.x || st.y !== c.y);
+    for (let i = 0; i < 3; i++) setTimeout(() => sfx.boom(1), i * 180);
+    sfx.roar(1);
+    puffs.push({ x: c.x, y: c.y, z: 0, t: 1.2, life: 1.2, vx: 0, vy: 0, kind: 'railboom' });
+    for (let ring = 1; ring <= 4; ring++) for (let i = 0; i < 6 + ring * 4; i++) {
+      const a = i / (6 + ring * 4) * Math.PI * 2, r = ring * 1.8, life = 0.9 + ring * 0.25;
+      puffs.push({ x: c.x + Math.cos(a) * r * 0.3, y: c.y + Math.sin(a) * r * 0.3, z: 0, t: life, life, vx: Math.cos(a) * r * 1.6, vy: Math.sin(a) * r * 1.6, kind: ring % 2 ? 'railboom' : 'boom' });
+    }
+    for (let i = 0; i < 14; i++) puffs.push({ x: c.x + rand(-2.5, 2.5), y: c.y + rand(-2.5, 2.5), z: 0, t: rand(1.5, 2.8), life: 2.8, vx: rand(-0.4, 0.4), vy: rand(-0.4, 0.4), kind: 'smoke' });
+    for (let i = 0; i < 20; i++) { const a = rand(0, 6.3), sp = rand(2, 7); puffs.push({ x: c.x, y: c.y, z: 0.3, t: rand(1, 2), life: 2, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, vz: rand(3, 7), kind: i % 2 ? 'gib' : 'spark' }); }
+    railBlast(c.x, c.y, 9);
+  }
+  // screen shake after the blast, fading out
+  if (c.baseA !== null) {
+    const shake = c.blown ? Math.max(0, 1 - (c.t - 4.6) / 3.5) : 0;
+    P.a = c.baseA + rand(-1, 1) * 0.03 * shake; P.pitch = c.basePitch + rand(-1, 1) * 9 * SC * shake;
+  }
+  P.railFlash = Math.max(0, P.railFlash - dt * 1.2);
+  P.kick = 0; P.flash = 0; mouseDX = mouseDY = 0;
+  updatePuffs(dt);
+  if (c.t >= c.dur) {
+    camLift = 0; cine = null; screenEl.classList.remove('cine');
+    if (c.bossAfter) startCine(c.bossAfter);
+  }
+}
 function cineStep(dt) {
+  if (cine.orbital) return orbitalStep(dt);
   const c = cine, e = c.boss; c.t += dt;
   const want = Math.atan2(e.y - P.y, e.x - P.x), da = ((want - P.a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
   P.a += da * Math.min(1, dt * 4); P.pitch += (-12 * SC - P.pitch) * Math.min(1, dt * 3);
@@ -2987,7 +3087,36 @@ function cineStep(dt) {
   puffs = puffs.filter(p => p.t > 0);
   if (c.t >= c.dur) { cine = null; screenEl.classList.remove('cine'); endGame(true); }
 }
+function drawOrbital() {
+  const c = cine, bar = H * 0.13 * Math.min(1, c.t / 0.5, (c.dur - c.t) / 0.6);
+  const big = (txt, y, size, col, a = 1) => { ctx.save(); ctx.globalAlpha = a; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `700 ${size}px Silkscreen, monospace`;
+    ctx.fillStyle = '#000'; ctx.fillText(txt, W / 2 + 3, y + 3); ctx.fillStyle = col; ctx.fillText(txt, W / 2, y); ctx.restore(); };
+  // a blue tint while the satellite takes aim
+  if (c.t < 4.6) { ctx.fillStyle = `rgba(40,90,200,${(0.18 * Math.min(1, c.t)).toFixed(2)})`; ctx.fillRect(0, 0, W, H); }
+  // the spinning lock-on reticle over the target
+  if (c.t > 0.8 && c.t < 4.6) {
+    const s = project(c.x, c.y, 0);
+    if (s) {
+      const r = 60 - Math.min(1, (c.t - 0.8) / 2.5) * 34, spin = c.t * 2.5;
+      ctx.save(); ctx.translate(s[0], s[1]); ctx.strokeStyle = (c.t * 6 | 0) % 2 ? '#ff3a4a' : '#7fd8ff'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.rotate(spin); for (let i = 0; i < 4; i++) { ctx.rotate(Math.PI / 2); ctx.beginPath(); ctx.moveTo(r + 4, 0); ctx.lineTo(r + 18, 0); ctx.stroke(); }
+      ctx.restore();
+    }
+  }
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, bar); ctx.fillRect(0, H - bar, W, bar);
+  if (c.t < 1.5) big('ORBITAL STRIKE AUTHORIZED', H * 0.24, 28, (c.t * 4 | 0) % 2 ? '#ff3a4a' : '#ffffff');
+  else if (c.t < 4) { big('SATELLITE LOCKED', H * 0.22, 22, '#7fd8ff'); big(String(3 - Math.floor(c.t - 1.5)), H * 0.5, 96, '#ffffff', 1 - ((c.t - 1.5) % 1) * 0.6); }
+  // the white-out at the moment of impact
+  if (c.t > 4.4 && c.t < 6) { const k = c.t < 4.6 ? (c.t - 4.4) / 0.2 : Math.max(0, 1 - (c.t - 4.6) / 1.4); ctx.fillStyle = `rgba(230,245,255,${(k * 0.95).toFixed(2)})`; ctx.fillRect(0, 0, W, H); }
+  if (c.t > 7.5) {
+    const n = stats.kills - c.kills, a = Math.min(1, (c.t - 7.5) / 0.5);
+    big('TARGET ELIMINATED', H * 0.42, 34, '#ff3a4a', a);
+    big(n ? n + (n === 1 ? ' ZOMBIE' : ' ZOMBIES') + ' VAPORIZED' : 'NOTHING LEFT STANDING', H * 0.42 + 44, 20, '#f3b23a', a);
+  }
+}
 function drawCine() {
+  if (cine.orbital) return drawOrbital();
   const c = cine, bar = H * 0.13 * Math.min(1, c.t / 0.5);
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, bar); ctx.fillRect(0, H - bar, W, bar);
   if (c.t < 1.6) return;
@@ -3080,15 +3209,7 @@ function update(dt) {
   updateSpits(dt);
   separate();
   updateRespawns(dt);
-  for (const p of puffs) {
-    p.t -= dt;
-    if (p.vx || p.vy) {
-      const nx = p.x + p.vx * dt, ny = p.y + p.vy * dt;
-      if (solid(nx, ny)) p.vx = p.vy = 0; else { p.x = nx; p.y = ny; }
-    }
-    if (p.kind === 'flame') p.z += dt * 0.3;
-  }
-  puffs = puffs.filter(p => p.t > 0);
+  updatePuffs(dt);
 }
 
 // ---------- rendering ----------
@@ -3151,7 +3272,7 @@ function drawFace(x, dn, zLo, zHi, side, rdx, rdy, tex, reps, light, flip, yTop,
 function render(t) {
   dbuf.fill(1e9);
   const dX = Math.cos(P.a), dY = Math.sin(P.a), plX = -dY * FOV, plY = dX * FOV;
-  camZ = P.z + EYE + (P.onGround ? Math.sin(P.bob * 2) * 0.012 : 0);
+  camZ = P.z + EYE + camLift + (P.onGround ? Math.sin(P.bob * 2) * 0.012 : 0);
   hz = HALF + P.pitch;
   const light = 1 + P.flash * 0.35, cz0 = camZ * K, cz1 = (camZ - 1) * K, above = camZ > 1;
   for (let x = 0; x < W; x++) {
@@ -3242,9 +3363,12 @@ function render(t) {
     let fr = e.k.fly && e.state !== 'dead' && e.state !== 'shoot' ? ((e.anim | 0) & 1 ? 'walk2' : 'idle') : frameOf(e, e.moving);
     // a gun zombie shooting at you turns and levels its gun straight at the camera
     if (e.gtex && e.state === 'shoot' && e.tgt === P) fr = fr === 'shoot' ? 'aimfire' : 'aim';
+    if (e.state === 'dead' && !e.k.boss) { add(e.x, e.y, PUFF.pool, 0.9, 0, 1); continue; }
     add(e.x, e.y, (e.gtex || e.tex || e.k.tex)[fr], e.state === 'dead' && !e.k.boss ? 1 : e.k.scale, e.z, e.flash > 0 ? 2.6 : 1, !e.k.boss && e.state !== 'dead' && faceLeft(e));
   }
-  for (const a of allies) add(a.x, a.y, a.look.guns[a.gun][frameOf(a, a.moving, HUMAN_CYCLE)], a.state === 'down' ? 1 : a.k.scale, 0, a.flash > 0 ? 2.6 : 1, a.state !== 'down' && faceLeft(a));
+  // a Tung recruit standing still glances left and right
+  const glance = ['idle', 'lookL', 'idle', 'lookR'][(t / 700 | 0) & 3];
+  for (const a of allies) add(a.x, a.y, a.look.guns[a.gun][((f) => (f === 'idle' && a.look.look.tung ? glance : f))(frameOf(a, a.moving, HUMAN_CYCLE))], a.state === 'down' ? 1 : a.k.scale, 0, a.flash > 0 ? 2.6 : 1, a.state !== 'down' && faceLeft(a));
   for (const it of items) {
     if (it.taken) continue;
     const def = itemDef(it);
@@ -3257,7 +3381,7 @@ function render(t) {
   for (const gr of grenades) add(gr.x, gr.y, gr.kind === 'emp' ? PUFF.empNade : PUFF.grenade, 0.18, gr.z - 0.05, gr.kind === 'emp' ? 3 : 1.3);
   for (const p of puffs) {
     const age = p.life - p.t;
-    const sc = p.kind === 'flame' ? 0.12 + age * 0.9 : p.kind === 'boom' ? 0.5 + age * 3.2 : p.kind === 'railboom' ? 1.2 + age * 7 : p.kind === 'beam' ? 14 : p.kind === 'emp' ? 0.6 + age * 16 : p.kind === 'zap' ? 0.25 : 0.1 + age * 0.6;
+    const sc = p.kind === 'flame' ? 0.12 + age * 0.9 : p.kind === 'gib' || p.kind === 'bone' ? 0.14 : p.kind === 'smoke' ? 0.7 + age * 0.6 : p.kind === 'burst' ? 0.7 + age * 3 : p.kind === 'boom' ? 0.5 + age * 3.2 : p.kind === 'railboom' ? 1.2 + age * 7 : p.kind === 'beam' ? 14 : p.kind === 'emp' ? 0.6 + age * 16 : p.kind === 'zap' ? 0.25 : 0.1 + age * 0.6;
     add(p.x, p.y, PUFF[p.kind], sc, p.kind === 'boom' || p.kind === 'emp' || p.kind === 'railboom' ? (p.z || 0) + 0.45 - sc / 2 : p.z, 3);
   }
   list.sort((a, b) => b.tY - a.tY);
@@ -3300,7 +3424,7 @@ function render(t) {
   present(t);
 }
 
-// Sniper scope (hold right mouse or press F with the sniper out): the middle of the view is blown up 3x and framed
+// Sniper scope (hold right mouse, or press Shift+Q or F, with the sniper out): the middle of the view is blown up 3x and framed
 // by a round black scope with a crosshair. Aiming slows down to match.
 let scopeOn = false;
 const ZOOM = 3, zoomCv = document.createElement('canvas'); zoomCv.width = W; zoomCv.height = H;
@@ -3559,8 +3683,33 @@ const TIPS = ['Spitters lock on with a red line. Get behind a wall fast.', 'Runn
   'The sniper rifle shoots through three zombies in a row.',
   'Stand next to a downed recruit to revive them.', 'Rot bats fly. Look up to aim at them.', 'Beat every boss to unlock something special.'];
 const TITLE_COPY = [$('mTitle').textContent, $('mEyebrow').textContent, $('mText').textContent, 'Play'];
+// who got you, and how to beat them next time
+const KILLERS = {
+  g: ['a Walker', 'Walkers carry guns. Keep moving side to side and pick them off from far away with the rifle or sniper.'],
+  h: ['a Brute', 'Brutes are tough and carry big guns. Hit them with the shotgun up close or the bazooka, and duck behind cover between shots.'],
+  d: ['a Rot bat', 'Rot bats fly. Move the mouse up to aim at them and spray them with the minigun or assault rifle.'],
+  m: ['a Runner', 'Runners are fast but cannot climb. Jump on a car with E and shoot down at them, or back up while firing the shotgun.'],
+  S: ['a Spitter', 'When its red line locks on you, get behind a wall fast. Then pop out and snipe it while it reloads.'],
+  u: ['a Puker', 'Pukers are slow. Keep your distance and shoot them before they get close enough to blind you.'],
+  B: ['The Butcher', 'Keep moving so its missiles miss, and never let it get close enough to punch. The bazooka and railgun hurt it badly.'],
+  O: ['The Hive Mother', 'Get on a roof and aim up. Kill the rot bats it sends, then hit it with the orbital railgun.'],
+  C: ['The Tank', 'Sidestep when it charges. If it slams into a wall it is stunned, so unload on it. Jump over its ground slam.'],
+  K: ['The Zombie King', 'It uses every boss power. Keep moving, jump over its slams, and save your orbital railgun charges for it.'],
+};
+function showKiller() {
+  const k = P && P.killer && KILLERS[P.killer.code];
+  $('mKiller').hidden = !k;
+  if (!k) return;
+  const gun = P.killer.gun && ({ pistol: 'pistol', shotgun: 'shotgun', flamer: 'flamethrower', minigun: 'minigun', launcher: 'grenade launcher' })[P.killer.gun];
+  $('mKillerName').textContent = 'Killed by ' + k[0] + (gun ? ' with a ' + gun : '');
+  $('mKillerTip').textContent = 'How to fight it: ' + k[1];
+  const g = $('mKillerPic').getContext('2d'); g.clearRect(0, 0, 64, 64); g.imageSmoothingEnabled = false;
+  const entry = ALMANAC.find(a => a.code === P.killer.code);
+  if (entry) entry.draw(g, P.killer.gun);
+}
 function showMenu(kind) {
   menu.hidden = false;
+  if (kind === 'dead') showKiller(); else $('mKiller').hidden = true;
   $('pilotBtn').hidden = !pilotUnlocked || (kind !== 'title' && kind !== 'win');
   $('arcadeBtn').hidden = kind !== 'title';
   menu.classList.toggle('title', kind === 'title');
@@ -3579,7 +3728,8 @@ function showMenu(kind) {
   const copy = {
     title: TITLE_COPY,
     pause: ['Paused', 'Holding', 'The dead are waiting. So is your ammo.', 'Resume'],
-    dead: ['Eaten', 'Mission failed', 'The horde got you this time. Gear up and go back in.', 'Try again'],
+    // the death title is random: Eaten is the most likely, but only by 10 points (40% / 30% / 30%)
+    dead: [(r => (r < 0.4 ? 'Eaten' : r < 0.7 ? 'You ded' : 'Get wrecked lol'))(Math.random()), 'Mission failed', 'The horde got you this time. Gear up and go back in.', 'Try again'],
     win: [MAPS[mapIndex].name + ' secured', bossName() + ' is dead for good',
       P && P.unlockedNew ? 'New map unlocked: ' + P.unlockedNew + (P.unlockedNew === 'The Necropolis' ? '. The final boss is waiting there.' : '. A new boss is waiting there.')
         : MAPS[mapIndex].boss === 'K' ? 'You defeated the Zombie King and every boss in Spray and Decay. You unlocked the Pilot Edition: the very first version of the game, back when it was called Rust Sector!' : 'You and your recruits took it back, block by block.', 'Choose map'],
@@ -3588,11 +3738,9 @@ function showMenu(kind) {
   $('mBtn').focus({ preventScroll: true });
 }
 function start(i = mapIndex) {
-  cine = null; screenEl.classList.remove('cine');
-  const summonTung = sahurNext; sahurNext = false;
+  camLift = 0; cine = null; screenEl.classList.remove('cine');
   logGame('quit');
   initAudio(); loadMap(i); newGame(); logBug('game', 'start ' + MAPS[i].name); state = 'play'; menu.hidden = true; lock(); setMusicLevel();
-  if (summonTung) setTimeout(() => state === 'play' && spawnTung(), 5000);
   if (MAPS[i].arena) {
     for (const w of ORDER) P.has[w] = true;
     P.armor = 100;
@@ -3627,7 +3775,7 @@ $('spawnClose').addEventListener('click', resume);
 let pausedAt = 0;
 function pause() { if (state !== 'play') return; state = 'pause'; pausedAt = performance.now(); mouseDown = false; touchFire = false; unlock(); showMenu('pause'); setMusicLevel(); }
 function endGame(won) { logGame(won ? 'won' : 'died'); state = won ? 'win' : 'dead'; mouseDown = false; touchFire = false; unlock(); showMenu(won ? 'win' : 'dead'); setMusicLevel(); }
-function toTitle() { cine = null; screenEl.classList.remove('cine'); logGame('quit'); state = 'menu'; unlock(); showMenu('title'); setMusicLevel(); }
+function toTitle() { camLift = 0; cine = null; screenEl.classList.remove('cine'); logGame('quit'); state = 'menu'; unlock(); showMenu('title'); setMusicLevel(); }
 $('mBtn').addEventListener('click', () => (state === 'pause' ? resume() : state === 'dead' ? start(mapIndex) : (initAudio(), showView('maps'))));
 $('almBtn').addEventListener('click', () => { initAudio(); showView('almanac'); });
 $('fxBtn').addEventListener('click', toggleShaders);
@@ -3657,20 +3805,43 @@ const CREW_COLORS = {
 };
 function renderCrew() {
   $('crewGrid').innerHTML = RECRUITS.map((r, i) => `<div class="crewCard"><canvas id="crew${i}" width="64" height="64"></canvas><div>
-    <input type="text" id="crewName${i}" maxlength="10" value="${r.name.replace(/[<>&"]/g, '')}" aria-label="Recruit ${i + 1} name">
+    <input type="text" id="crewName${i}" maxlength="22" value="${r.name.replace(/[<>&"]/g, '')}" aria-label="Recruit ${i + 1} name">
     ${Object.entries({ skin: 'Skin', helmet: 'Helmet', kit: 'Uniform' }).map(([part, label]) => `<div class="swatches"><span>${label}</span>${CREW_COLORS[part].map(c =>
       `<button type="button" data-i="${i}" data-part="${part}" data-c="${c}" class="${r.look[part] === c ? 'on' : ''}" style="background:${c}" aria-label="${label} ${c}"></button>`).join('')}</div>`).join('')}
+    ${tungUnlocked ? `<button class="btn tungBtn${r.look.tung ? ' primary' : ''}" type="button" data-tung="${i}">Tung Tung Tung Sahur: ${r.look.tung ? 'On' : 'Off'}</button>` : ''}
   </div></div>`).join('');
   RECRUITS.forEach((r, i) => {
     const g = $('crew' + i).getContext('2d'); g.imageSmoothingEnabled = false; drawHuman(g, { ...r.look, gun: 'rifle', frame: 'idle' });
-    $('crewName' + i).addEventListener('input', e => { r.name = e.target.value.trim().slice(0, 10) || ['Skid', 'Moe'][i]; saveCrew(); });
+    $('crewName' + i).addEventListener('input', e => {
+      r.name = e.target.value.trim().slice(0, 22) || ['Skid', 'Moe'][i];
+      // naming a recruit after Tung Tung Tung Sahur turns him into him (and unlocks the skin)
+      const tung = /tung/i.test(r.name);
+      if (tung !== !!r.look.tung) {
+        r.look.tung = tung; if (tung) { tungUnlocked = true; sfx.tung(1); }
+        buildRecruit(r);
+        const g = $('crew' + i).getContext('2d'); g.clearRect(0, 0, 64, 64); drawHuman(g, { ...r.look, gun: 'rifle', frame: 'idle' });
+        const b = document.querySelector(`.tungBtn[data-tung="${i}"]`);
+        if (b) { b.textContent = 'Tung Tung Tung Sahur: ' + (tung ? 'On' : 'Off'); b.classList.toggle('primary', tung); }
+      }
+      saveCrew();
+    });
   });
+  document.querySelectorAll('#crewGrid .tungBtn').forEach(b => b.addEventListener('click', () => {
+    const r = RECRUITS[+b.dataset.tung]; r.look.tung = !r.look.tung; if (r.look.tung) sfx.tung(1);
+    buildRecruit(r); saveCrew(); renderCrew();
+  }));
   document.querySelectorAll('#crewGrid .swatches button').forEach(b => b.addEventListener('click', () => {
     const r = RECRUITS[+b.dataset.i]; r.look[b.dataset.part] = b.dataset.c; buildRecruit(r); saveCrew(); renderCrew();
   }));
 }
-function saveCrew() { try { localStorage.setItem(RECRUIT_KEY, JSON.stringify(RECRUITS.map(r => ({ name: r.name, look: r.look })))); } catch (e) {} }
+function saveCrew() { try { localStorage.setItem(RECRUIT_KEY, JSON.stringify(RECRUITS.map(r => ({ name: r.name, look: r.look })))); localStorage.setItem('rust-sector-tung', tungUnlocked ? 'yes' : 'no'); } catch (e) {} }
 $('crewBtn').addEventListener('click', () => { renderCrew(); showView('crew'); });
+let crewTick = 0;
+setInterval(() => {
+  if ($('crewView').hidden) return;
+  const f = ['idle', 'lookL', 'idle', 'lookR'][++crewTick & 3];
+  RECRUITS.forEach((r, i) => { if (!r.look.tung || !$('crew' + i)) return; const g = $('crew' + i).getContext('2d'); g.clearRect(0, 0, 64, 64); drawHuman(g, { ...r.look, gun: 'rifle', frame: f }); });
+}, 700);
 $('radarBtn').addEventListener('click', () => { showMap = !showMap; $('radarBtn').textContent = 'Radar: ' + (showMap ? 'On' : 'Off'); });
 for (const [id, key] of [['volMusic', 'music'], ['volSfx', 'sfx'], ['sens', 'sens']]) {
   const el = $(id), out = $(id + 'Out');
@@ -3745,34 +3916,34 @@ function renderMaps() {
 
 // Almanac: one card per enemy, drawn with the same sprite code the game uses. Later bosses stay hidden until their map unlocks.
 const ALMANAC = [
-  { name: 'Walker', tag: 'Common · 40 health', health: 2, speed: 2, damage: 2,
-    draw: g => drawZombie(g, { ...GRUNT_LOOK, frame: 'idle' }),
+  { code: 'g', name: 'Walker', tag: 'Common · 40 health', health: 2, speed: 2, damage: 2,
+    draw: (g, gun) => drawZombie(g, { ...GRUNT_LOOK, gun: gun || 'pistol', frame: 'idle' }),
     text: 'A dead soldier still holding its gun: pistol, shotgun, flamethrower, minigun or grenade launcher. Check what it carries.' },
-  { name: 'Brute', tag: 'Tough · 110 health', health: 3, speed: 1, damage: 4,
-    draw: g => drawZombie(g, { ...HEAVY_LOOK, gun: 'minigun', frame: 'idle' }),
+  { code: 'h', name: 'Brute', tag: 'Tough · 110 health', health: 3, speed: 1, damage: 4,
+    draw: (g, gun) => drawZombie(g, { ...HEAVY_LOOK, gun: gun || 'minigun', frame: 'idle' }),
     text: 'A big bloated zombie with burning orange eyes. Usually packs the big guns: minigun, flamethrower or grenade launcher.' },
-  { name: 'Rot bat', tag: 'Flying · 30 health', health: 1, speed: 5, damage: 2,
+  { code: 'd', name: 'Rot bat', tag: 'Flying · 30 health', health: 1, speed: 5, damage: 2,
     draw: g => drawDrone(g, 'idle'),
     text: 'A rotting bat that circles over the street and spits acid. Look up to aim at it.' },
-  { name: 'Runner', tag: 'Melee · 55 health', health: 2, speed: 4, damage: 4,
+  { code: 'm', name: 'Runner', tag: 'Melee · 55 health', health: 2, speed: 4, damage: 4,
     draw: g => drawShredder(g, 'idle'),
     text: 'Thin, fast and hungry, with long bone claws. Sprints straight at you. Back up while you shoot, or jump on a car. It cannot climb.' },
-  { name: 'Puker', tag: 'Blinds you · 90 health', health: 2, speed: 1, damage: 2,
+  { code: 'u', name: 'Puker', tag: 'Blinds you · 90 health', health: 2, speed: 1, damage: 2,
     draw: g => drawPuker(g, 'idle'),
     text: 'A swollen, slow zombie that throws up on you from a few steps away. If it hits, your eyes get covered in gunk and you can barely see for a few seconds. Keep your distance.' },
-  { name: 'Spitter', tag: 'Sniper · 140 health', health: 3, speed: 0, damage: 5,
+  { code: 'S', name: 'Spitter', tag: 'Sniper · 140 health', health: 3, speed: 0, damage: 5,
     draw: g => drawSentinel(g, 'idle'),
     text: 'A swollen zombie rooted to one spot. When its red aim line locks on you, get behind a wall within a second or it spits.' },
-  { name: 'The Butcher', tag: 'Boss of Dead End City · 1200 health', health: 3, speed: 1, damage: 4, boss: true, map: 0,
+  { code: 'B', name: 'The Butcher', tag: 'Boss of Dead End City · 1200 health', health: 3, speed: 1, damage: 4, boss: true, map: 0,
     draw: g => drawBoss(g, 'idle'),
     text: 'A giant in a bloody apron with rocket tubes on its shoulders. Fires missiles from far away and punches up close.' },
-  { name: 'The Hive Mother', tag: 'Boss of the Boneyard · 2500 health', health: 5, speed: 4, damage: 4, boss: true, map: 1,
+  { code: 'O', name: 'The Hive Mother', tag: 'Boss of the Boneyard · 2500 health', health: 5, speed: 4, damage: 4, boss: true, map: 1,
     draw: g => drawOverseer(g, 'idle'),
     text: 'A floating mass of flesh and eyes. Fires missiles and acid bursts and calls in rot bats. Get on a roof and aim up.' },
-  { name: 'The Tank', tag: 'Boss of Ghoul Harbor · 2200 health', health: 4, speed: 3, damage: 5, boss: true, map: 2,
+  { code: 'C', name: 'The Tank', tag: 'Boss of Ghoul Harbor · 2200 health', health: 4, speed: 3, damage: 5, boss: true, map: 2,
     draw: g => drawCrusher(g, 'idle'),
     text: 'Charges straight at you and slams the ground. Jump over the shockwave. If it rams a wall it is stunned: unload on it.' },
-  { name: 'The Zombie King', tag: 'Final boss of The Necropolis · 4000 health', health: 5, speed: 3, damage: 5, boss: true, map: 3,
+  { code: 'K', name: 'The Zombie King', tag: 'Final boss of The Necropolis · 4000 health', health: 5, speed: 3, damage: 5, boss: true, map: 3,
     draw: g => drawKing(g, 'idle'),
     text: 'Has every boss power: missiles, punches, acid, bats, charges and slams, plus a giant leap. Gets stronger in 3 phases.' },
 ];
@@ -3848,16 +4019,17 @@ renderMaps();
 
 // ---------- input ----------
 // secret codes, typed on the title screen
-let typed = '', superJump = false, danceT = 0, sahurNext = false;
+let typed = '', superJump = false, danceT = 0;
 const CODES = {
   creeper() { sfx.hiss(); setTimeout(() => { sfx.boom(1); menu.animate([{ filter: 'brightness(4)' }, { filter: 'none' }], 400); toastMsg('Sssss... BOOM! A creeper got too close'); }, 1400); },
   dance() { danceT = 6; toastMsg('The horde hits a victory dance!'); },
-  sahur() { sahurNext = true; sfx.tung(1); toastMsg('Tung tung tung... he is coming in your next game'); },
+  'triple t'() { tungUnlocked = true; saveCrew(); sfx.tung(1); toastMsg('Unlocked: Tung Tung Tung Sahur skin! Open Recruits to use it'); },
   wahoo() { superJump = !superJump; sfx.coin(); toastMsg(superJump ? 'Wahoo! Super jump is on' : 'Super jump is off'); },
 };
 addEventListener('keydown', e => {
   keys[e.code] = true;
   if (state === 'menu' && e.key.length === 1 && !(e.target instanceof HTMLInputElement)) {
+    if (e.key === ' ' && typed.endsWith('triple')) e.preventDefault(); // the space in "triple t" mustn't press the focused button
     typed = (typed + e.key.toLowerCase()).slice(-12);
     for (const c in CODES) if (typed.endsWith(c)) { typed = ''; initAudio(); CODES[c](); }
   }
@@ -3871,7 +4043,7 @@ addEventListener('keydown', e => {
     else if (e.code === 'Digit6') setWeapon('rifle');
     else if (e.code === 'Digit7') setWeapon('sniper');
     else if (e.code === 'Digit8') setWeapon('railgun');
-    else if (e.code === 'KeyF' && !e.repeat) scopeOn = !scopeOn;
+    else if ((e.code === 'KeyF' || (e.code === 'KeyQ' && e.shiftKey)) && !e.repeat) scopeOn = !scopeOn;
     else if (e.code === 'KeyM') showMap = !showMap;
     else if (e.code === 'KeyN') toggleMusic();
     else if (e.code === 'KeyG' && !e.repeat) grenadeKey();
