@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Spray and Decay – free zombie shooter you can play in your browser</title>
 <meta name="description" content="Spray and Decay is a free first-person zombie shooter that runs in your browser. Fight the horde with your recruits Skid and Moe, eight weapons including an orbital railgun, four zombie bosses, a mini-game arcade and hidden easter eggs.">
 <meta name="keywords" content="Spray and Decay, zombie game, zombie shooter, browser game, free online game, FPS">
@@ -31,7 +33,7 @@
   color-scheme:dark;
 }
 [hidden]{display:none!important}
-html{height:100%;box-sizing:border-box}
+html{height:100%;box-sizing:border-box;overscroll-behavior:none;-webkit-text-size-adjust:100%}
 body{height:100%;box-sizing:border-box;background:var(--bg);color:var(--ink);font-family:var(--f-num);overflow:hidden;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;
   user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
@@ -203,6 +205,23 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
 #jumpBtn{right:19cqw;bottom:9cqw;width:9cqw;height:9cqw;font-size:1.3cqw;background:rgba(127,196,255,.45)}
 #nadeBtn{right:28cqw;bottom:13cqw;width:8cqw;height:8cqw;font-size:1.3cqw;background:rgba(74,90,50,.7)}
 #swapBtn{right:19cqw;bottom:21cqw;width:8cqw;height:8cqw;font-size:1.3cqw;background:rgba(40,40,40,.6)}
+#runBtn{left:3cqw;top:31cqw;width:8cqw;height:8cqw;font-size:1.3cqw;background:rgba(127,214,140,.35)}
+#runBtn.on{background:rgba(127,214,140,.8);color:#0c1a0c}
+#scopeBtn{right:31cqw;bottom:24cqw;width:8cqw;height:8cqw;font-size:1.3cqw;background:rgba(255,60,40,.4)}
+#scopeBtn.on{background:rgba(255,60,40,.85)}
+/* phones held upright: ask to turn sideways (the game is a wide screen) */
+#rotate{display:none;position:fixed;inset:0;z-index:50;background:#060404;color:var(--ink);flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;
+  font-family:var(--f-display);font-size:18px;letter-spacing:.12em;text-transform:uppercase;padding:16px}
+#rotate .phone{width:46px;height:80px;border:4px solid var(--amber);border-radius:8px;animation:tilt 2s ease-in-out infinite}
+@keyframes tilt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait){.touch #rotate{display:flex}}
+@media (prefers-reduced-motion:reduce){#rotate .phone{animation:none;transform:rotate(-90deg)}}
+/* bigger menu buttons and text for fingers */
+.touch #menu.title.home .btn{font-size:1.9cqw;padding:1.05cqw 1.6cqw;white-space:nowrap}
+.touch #menu.title.home .btns{width:44cqw}
+.touch .card .btn{font-size:2.4cqw;padding:1.4cqw 2.6cqw}
+.touch #horde{width:46cqw}
+.touch .tab{font-size:2.2cqw;padding:1.2cqw 2.6cqw}
 #pauseBtn{right:2.2cqw;top:22cqw;width:auto;height:auto;border-radius:0;padding:.6cqw 1.4cqw;font-size:1.3cqw;background:rgba(0,0,0,.5)}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
 </style>
@@ -233,7 +252,10 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
       <button class="tbtn" id="jumpBtn" type="button">Jump</button>
       <button class="tbtn" id="fireBtn" type="button">Fire</button>
       <button class="tbtn" id="pauseBtn" type="button">Pause</button>
+      <button class="tbtn" id="runBtn" type="button">Run</button>
+      <button class="tbtn" id="scopeBtn" type="button" hidden>Scope</button>
     </div>
+    <div id="rotate"><div class="phone"></div><p>Turn your phone sideways to play</p></div>
     <div class="overlay" id="spawnMenu" hidden>
       <div class="card wide">
         <p class="eyebrow">Test arena</p>
@@ -268,6 +290,7 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
           <button class="btn" id="setBtn" type="button">Settings</button>
           <button class="btn" id="crewBtn" type="button">Recruits</button>
           <button class="btn" id="arcadeBtn" type="button">Mini games</button>
+          <button class="btn" id="fsBtn" type="button" hidden>Full screen</button>
           <button class="btn pilot" id="pilotBtn" type="button" hidden>Pilot edition</button>
           <button class="btn" id="quitBtn" type="button" hidden>Main menu</button>
         </div>
@@ -312,6 +335,9 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
           <div><dt>Fire</dt><dd>Shoot</dd></div>
           <div><dt>Jump</dt><dd>Jump</dd></div>
           <div><dt>Nade</dt><dd>Grenade / reload</dd></div>
+          <div><dt>Run</dt><dd>Sprint on / off</dd></div>
+          <div><dt>Swap</dt><dd>Next weapon</dd></div>
+          <div><dt>Scope</dt><dd>Sniper scope</dd></div>
         </dl>
         <button class="btn back" type="button">Back</button>
       </div>
@@ -2122,7 +2148,7 @@ function toggleMusic() {
 // ---------- gameplay ----------
 let state = 'menu', showMap = true;
 const keys = {};
-let mouseDown = false, mouseDX = 0, mouseDY = 0, overScreen = false, mouseNX = 0, mouseNY = 0, touchTurn = 0, touchPitch = 0, touchFire = false, touchJump = false;
+let touchRun = false, mouseDown = false, mouseDX = 0, mouseDY = 0, overScreen = false, mouseNX = 0, mouseNY = 0, touchTurn = 0, touchPitch = 0, touchFire = false, touchJump = false;
 const tMove = { fw: 0, st: 0 };
 let camZ = EYE, hz = HALF, camLift = 0; // camLift raises the camera during the orbital strike cutscene
 
@@ -3163,8 +3189,8 @@ function update(dt) {
     P.pitch -= edge(mouseNY) * 90 * SC * dt;
   }
   const sens = SETTINGS.sens / 100 / (scopeOn && P.weapon === 'sniper' ? ZOOM : 1);
-  P.a += turn * 2.4 * dt + mouseDX * 0.0024 * sens + touchTurn;
-  P.pitch = clamp(P.pitch - mouseDY * 0.35 * SC * sens + touchPitch * SC, -110 * SC, 110 * SC);
+  P.a += turn * 2.4 * dt + mouseDX * 0.0024 * sens + touchTurn * sens;
+  P.pitch = clamp(P.pitch - mouseDY * 0.35 * SC * sens + touchPitch * SC * sens, -110 * SC, 110 * SC);
   mouseDX = mouseDY = touchTurn = touchPitch = 0;
   let fw = tMove.fw, st = tMove.st;
   if (keys.KeyW || keys.ArrowUp) fw += 1;
@@ -3174,7 +3200,7 @@ function update(dt) {
   const len = Math.hypot(fw, st);
   if (len > 1) { fw /= len; st /= len; }
   // sprint: four seconds of stamina that refills when you let go
-  const wantRun = (keys.KeyR || keys.ShiftLeft || keys.ShiftRight) && len > 0.05;
+  const wantRun = (keys.KeyR || keys.ShiftLeft || keys.ShiftRight || touchRun) && len > 0.05;
   if (wantRun && P.stamina > 0 && !P.winded) P.stamina = Math.max(0, P.stamina - dt);
   else P.stamina = Math.min(4, P.stamina + dt * 0.8);
   if (P.stamina <= 0) P.winded = true;
@@ -3624,7 +3650,8 @@ function updateHud() {
   $('stamBar').style.opacity = P.winded ? 0.4 : 1;
   setText('ammo', String(P[w.ammo]));
   setText('ammoLbl', w.label);
-  setText('nadeLbl', (P.nadeReload > 0 ? 'Reloading…' : P.nadeLoaded ? 'Grenade ready · G' : P.nades > 0 ? 'Press G to reload' : 'No grenades') + ' · ' + P.nades + ' spare');
+  setText('nadeLbl', (P.nadeReload > 0 ? 'Reloading…' : P.nadeLoaded ? (coarse ? 'Grenade ready · Nade' : 'Grenade ready · G') : P.nades > 0 ? (coarse ? 'Tap Nade to reload' : 'Press G to reload') : 'No grenades') + ' · ' + P.nades + ' spare');
+  if (coarse) { $('touch').hidden = state !== 'play'; $('scopeBtn').hidden = P.weapon !== 'sniper'; $('scopeBtn').classList.toggle('on', scopeOn); }
   const left = bossAt() - stats.kills;
   setText('kills', stats.kills + ' killed');
   setText('bossIn', MAPS[mapIndex].arena ? 'Press T to spawn zombies' : P.bossSpawned ? bossName() + ' is here · kill it' : left + ' more until ' + bossName(true));
@@ -4096,7 +4123,8 @@ view.addEventListener('contextmenu', e => e.preventDefault());
 
 // touch: left thumb moves, right thumb aims and looks
 const coarse = matchMedia('(pointer: coarse)').matches;
-if (coarse) { $('touch').hidden = false; $('kbKeys').hidden = true; $('touchKeys').hidden = false; }
+document.documentElement.classList.toggle('touch', coarse);
+if (coarse) { $('kbKeys').hidden = true; $('touchKeys').hidden = false; $('fsBtn').hidden = false; document.querySelector('.stamLbl').textContent = 'Sprint · tap Run'; }
 const touchEl = $('touch'), stick = $('stick');
 let moveId = null, lookId = null, mo = null, lookX = 0, lookY = 0;
 touchEl.addEventListener('pointerdown', e => {
@@ -4130,6 +4158,15 @@ const hold = (id, set) => {
 };
 hold('fireBtn', v => { touchFire = v; });
 hold('jumpBtn', v => { touchJump = v; });
+// Run toggles sprinting on and off (holding a button while steering with the stick is awkward)
+$('runBtn').addEventListener('click', () => { touchRun = !touchRun; $('runBtn').classList.toggle('on', touchRun); });
+$('scopeBtn').addEventListener('click', () => { scopeOn = !scopeOn; });
+// full screen on phones, turned sideways where the browser allows it
+$('fsBtn').addEventListener('click', () => {
+  const el = document.documentElement, go = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (!go) { toastMsg('Add this page to your home screen to play full screen'); return; }
+  Promise.resolve(go.call(el)).then(() => screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(() => {})).catch(() => {});
+});
 $('nadeBtn').addEventListener('click', grenadeKey);
 $('swapBtn').addEventListener('click', () => state === 'play' && cycleWeapon());
 $('pauseBtn').addEventListener('click', pause);

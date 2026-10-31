@@ -1,7 +1,7 @@
 <!doctype html>
 <!-- Spray and Decay arcade: five little PICO-8 style games on a 128x128 screen, each with a saved high score. -->
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Spray and Decay Arcade</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,9 +10,24 @@
 :root{--bg:#000}
 html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
 body{display:flex;align-items:center;justify-content:center}
-canvas{image-rendering:pixelated;width:min(100vw,100vh);height:min(100vw,100vh);outline:none}
+canvas{image-rendering:pixelated;width:min(100vw,100vh);height:min(100vw,100vh);outline:none;touch-action:none}
+body{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none}
+/* touch controls (phones and tablets only): a D-pad on the left, A and B on the right */
+.pad,.ab{position:fixed;bottom:16px;display:none;gap:6px}
+.touch .pad,.touch .ab{display:grid}
+.pad{left:16px;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px)}
+.ab{right:16px;grid-template-columns:repeat(2,64px);align-items:end}
+.pad button,.ab button,#tmenu{border:0;border-radius:10px;background:rgba(255,241,232,.18);color:#fff1e8;font:16px Silkscreen,monospace;touch-action:none}
+.pad button:active,.ab button:active,.pad button.on,.ab button.on{background:rgba(255,241,232,.45)}
+.ab button{height:64px;border-radius:50%;background:rgba(255,0,77,.45)}
+.ab button+button{background:rgba(41,173,255,.45);margin-bottom:34px}
+#tmenu{position:fixed;left:16px;top:16px;padding:8px 12px;display:none}
+.touch #tmenu{display:block}
 </style>
 <canvas id="c" width="128" height="128" tabindex="0"></canvas>
+<div class="pad" aria-label="Direction pad"><span></span><button data-k="ArrowUp" aria-label="Up">▲</button><span></span><button data-k="ArrowLeft" aria-label="Left">◀</button><span></span><button data-k="ArrowRight" aria-label="Right">▶</button><span></span><button data-k="ArrowDown" aria-label="Down">▼</button></div>
+<div class="ab"><button data-k="KeyX" aria-label="B">B</button><button data-k="KeyZ" aria-label="A">A</button></div>
+<button id="tmenu" data-k="Escape" type="button">Menu</button>
 <script>
 (() => {
 'use strict';
@@ -44,7 +59,15 @@ const btn = {
 };
 const tap = (...codes) => codes.some(c => pressed[c]);
 let mouse = null; // a click this frame, in screen pixels
-cv.addEventListener('mousedown', e => { const r = cv.getBoundingClientRect(); mouse = { x: (e.clientX - r.left) / r.width * 128, y: (e.clientY - r.top) / r.height * 128 }; cv.focus(); });
+cv.addEventListener('pointerdown', e => { const r = cv.getBoundingClientRect(); mouse = { x: (e.clientX - r.left) / r.width * 128, y: (e.clientY - r.top) / r.height * 128 }; cv.focus(); });
+
+// on-screen buttons press the same keys as the keyboard: A is Z, B is X
+if (matchMedia('(pointer: coarse)').matches) document.documentElement.classList.add('touch');
+for (const b of document.querySelectorAll('[data-k]')) {
+  const k = b.dataset.k, up = () => { keys[k] = false; b.classList.remove('on'); };
+  b.addEventListener('pointerdown', e => { e.preventDefault(); if (!keys[k]) pressed[k] = true; keys[k] = true; b.classList.add('on'); b.setPointerCapture(e.pointerId); });
+  b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up);
+}
 
 // ---------- sound ----------
 let ac = null;
@@ -91,7 +114,7 @@ function overScreen(game) {
   print('GAME OVER', 64, 45, 8, 'center');
   print('SCORE ' + game.score, 64, 58, 7, 'center');
   print(game.newBest ? 'NEW HIGH SCORE!' : 'BEST ' + (best[game.id] || 0), 64, 68, game.newBest ? 10 : 6, 'center');
-  print('Z AGAIN   X MENU', 64, 79, 13, 'center');
+  print(document.documentElement.classList.contains('touch') ? 'A AGAIN   B MENU' : 'Z AGAIN   X MENU', 64, 79, 13, 'center');
   if (tap('KeyZ', 'Space', 'Enter') || mouse) return 'again';
   if (tap('KeyX', 'Escape')) return 'menu';
 }
@@ -368,7 +391,7 @@ const bones = {
     print('SCORE ' + this.score, 2, 0, 7);
     print('LV ' + this.level, 64, 0, 13, 'center');
     for (let i = 0; i < this.lives; i++) rect(122 - i * 6, 2, 4, 4, 8);
-    if (b.stuck) print('Z TO LAUNCH', 64, 90, 6, 'center');
+    if (b.stuck) print(document.documentElement.classList.contains('touch') ? 'A TO LAUNCH' : 'Z TO LAUNCH', 64, 90, 6, 'center');
   },
 };
 
@@ -394,7 +417,7 @@ function menu() {
   const lines = [''];
   for (const w of GAMES[sel].blurb.toUpperCase().split(' ')) { if ((lines[lines.length - 1] + ' ' + w).trim().length > 21) lines.push(w); else lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + w).trim(); }
   lines.slice(0, 2).forEach((l, i) => print(l, 64, 98 + i * 9, 13, 'center'));
-  print('Z PLAY  ESC BACK', 64, 119, 5, 'center');
+  print(document.documentElement.classList.contains('touch') ? 'A PLAY  MENU BACK' : 'Z PLAY  ESC BACK', 64, 119, 5, 'center');
 }
 function frame() {
   t++;

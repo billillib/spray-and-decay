@@ -83,6 +83,11 @@ Q EMP · T spawn menu in the arena · M radar · N music · V shaders · Esc/P p
 - **Sniper scope**: Shift+Q or F toggles, right mouse holds; `drawScope` magnifies the middle 3x. Zombies die with a synthesized "bleh".
 - **Map names**: Dead End City, The Boneyard, Ghoul Harbor, The Necropolis, Test Arena.
 
+- **Phones** (`coarse` pointer → `html.touch`): touch controls only while playing (stick, Fire, Jump, Nade, Swap, Pause,
+  Run toggle `touchRun`, Scope when the sniper is out), a "turn your phone sideways" screen in portrait (`#rotate`),
+  bigger menu buttons, a Full screen button, no pinch zoom. The arcade has a D-pad and A/B buttons (A = Z, B = X).
+  Not yet checked on a real phone (only emulated); the CPU renderer may be slow on older phones.
+
 ## Bug log
 
 The game saves errors and a line per game in localStorage (`rust-sector-log`, last 80 entries). Controls →
