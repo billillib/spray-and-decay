@@ -17,7 +17,7 @@ simple, warm, short and skimmable. Answer Bill directly when a message is clearl
 
 - `index.html` — the whole game: one page, plain JavaScript, no build step, ~3,300 lines.
   Published as a claude.ai artifact: https://claude.ai/artifact/FuLk74BNQ9gAvJAGZjtedZ
-  (version 22 is current). Republish by publishing this same file path with `files` for arcade.html and pilot.html;
+  (version 23 is current). Republish by publishing this same file path with `files` for arcade.html and pilot.html;
   only publish when the user asks.
 - `arcade.html` — the Mini games page (opened in an iframe from the title menu): Cherry Tomb (a zombie parody of the
   PICO-8 shmup Cherry Bomb), Brain Snake, Grave Whacker, Zombie Dash, Bone Breaker. 128×128 PICO-8 palette, high
@@ -44,7 +44,7 @@ simple, warm, short and skimmable. Answer Bill directly when a message is clearl
   The Core (final boss Zombie King `K`, appears at 20 kills), Test Arena (always open, endless ammo,
   T opens a spawn menu). Beating a boss unlocks the next map; unlocks reset when the page reloads (by request).
   Each map: generator, sky kind, haze colour, district names. 9 districts per map; entering a new one spawns 13.
-- **Enemies** (`KINDS`): walker `g`, brute `h`, rot bat `d`, runner `m` (melee), puker `u` (bile blinds you: `P.blind`),
+- **Enemies** (`KINDS`): walker `g`, brute `h`, rot bat `d`, runner `m` (melee), puker `u` (bile blinds you: `P.blind`), bomber `b` (flies bombing runs over its target, `dropBomb`/`bombs` fall with a whistle and `explode`; its dynamite explodes when it dies; one per district),
   spitter `S` (red aim line, then a visible acid glob in `spits`), bosses B/O/C/K. Zombie art: `zHead`/`zTorso`/`zLegs`/`zArm`, `drawZombie`. Walkers/brutes carry a
   random gun (`ENEMY_GUNS`, own sprites per gun, plus `aim`/`aimfire` frames that point the gun at the camera
   when shooting at you) and may drop it. Side-on sprites mirror (`faceLeft`) toward their target or walk direction. Killed sentries respawn. Boss at 30 kills (20 on The Core).
