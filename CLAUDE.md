@@ -17,7 +17,7 @@ simple, warm, short and skimmable. Answer Bill directly when a message is clearl
 
 - `index.html` — the whole game: one page, plain JavaScript, no build step, ~3,300 lines.
   Published as a claude.ai artifact: https://claude.ai/artifact/FuLk74BNQ9gAvJAGZjtedZ
-  (version 17 is current). Republish by publishing this same file path with `files` for arcade.html and pilot.html;
+  (version 22 is current). Republish by publishing this same file path with `files` for arcade.html and pilot.html;
   only publish when the user asks.
 - `arcade.html` — the Mini games page (opened in an iframe from the title menu): Cherry Tomb (a zombie parody of the
   PICO-8 shmup Cherry Bomb), Brain Snake, Grave Whacker, Zombie Dash, Bone Breaker. 128×128 PICO-8 palette, high
