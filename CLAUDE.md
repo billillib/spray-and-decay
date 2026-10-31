@@ -2,9 +2,16 @@
 
 (Called Rust Sector until 2026-10-30; localStorage keys and some code names still say rust-sector.)
 
-A first-person shooter designed by Bill's 12-year-old son, who asks for features in quick, short messages
+A first-person shooter designed by Ernie, Bill's 12-year-old son, who asks for features in quick, short messages
 and plays the result. Bill (the account owner) jumps in occasionally to guide. Write for the son by default:
 simple, warm, short and skimmable. Answer Bill directly when a message is clearly from him.
+
+## Repo and hosting
+
+- GitHub: `billillib/spray-and-decay` (branch `main`). GitHub Pages serves `main` at
+  https://billillib.github.io/spray-and-decay/, so pushing to `main` changes the live site. Commit and push only
+  when asked.
+- The claude.ai artifact (below) is a second copy; publish it only when asked.
 
 ## Files
 
@@ -51,7 +58,10 @@ simple, warm, short and skimmable. Answer Bill directly when a message is clearl
   toggles, bug log; saved in localStorage `rust-sector-settings`), Mini games, Pilot edition. Pause has Quit game.
 - **Easter eggs**: per game each has a 1-in-3 chance to be hidden far out: ? block (Mario, +50 max health), diamond
   (Minecraft, full armor), rusty chest (Risk of Rain, fire 15% faster via `P.rate`), loot llama (Fortnite, ammo).
-  Codes typed on the title screen: `creeper`, `dance`, `wahoo` (super jump). Zombies sometimes show their brain.
+  Codes typed on the title screen: `creeper`, `dance`, `wahoo` (super jump), `sahur` (summons the secret
+  Tung Tung Tung Sahur, kind `T`: a log with a bat, 450 health, knockback; also a 3% surprise per wave; never respawns).
+- **Recruits screen**: rename Skid/Moe and pick skin, helmet and uniform colours (`CREW_COLORS`, `buildRecruit`), saved in
+  localStorage `rust-sector-recruits`. Zombies sometimes show their brain.
 
 ## Controls (as the user asked for them)
 

@@ -1,4 +1,15 @@
-<title>Spray and Decay</title>
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spray and Decay – free zombie shooter you can play in your browser</title>
+<meta name="description" content="Spray and Decay is a free first-person zombie shooter that runs in your browser. Fight the horde with your recruits Skid and Moe, eight weapons including an orbital railgun, four zombie bosses, a mini-game arcade and hidden easter eggs.">
+<meta name="keywords" content="Spray and Decay, zombie game, zombie shooter, browser game, free online game, FPS">
+<link rel="canonical" href="https://billillib.github.io/spray-and-decay/">
+<meta property="og:title" content="Spray and Decay">
+<meta property="og:description" content="A free zombie shooter you can play right in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://billillib.github.io/spray-and-decay/">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,14 +119,14 @@ button{font:inherit}
 #horde{position:absolute;right:0;bottom:0;width:62cqw;image-rendering:pixelated;pointer-events:none;opacity:.95}
 #menu.title.home{justify-content:center;align-items:flex-start;
   background:linear-gradient(90deg,rgba(6,4,4,.97) 0%,rgba(6,4,4,.86) 42%,rgba(20,4,4,.35) 100%),linear-gradient(0deg,rgba(60,0,0,.55),transparent 40%)}
-#menu.title.home #mainView{align-items:flex-start;text-align:left;margin-left:5cqw;max-width:44cqw;padding:1.5cqw 0;gap:1.1cqw}
-#menu.title.home h1{font-size:7.6cqw;color:#b3160f;text-shadow:0 0 2cqw rgba(200,20,10,.55),.45cqw .45cqw 0 #000;letter-spacing:.01em}
+#menu.title.home #mainView{align-items:flex-start;text-align:left;margin-left:5cqw;max-width:44cqw;padding:1.5cqw 0;gap:.9cqw}
+#menu.title.home h1{font-size:5.6cqw;color:#b3160f;text-shadow:0 0 2cqw rgba(200,20,10,.55),.45cqw .45cqw 0 #000;letter-spacing:.01em}
 #menu.title.home h1::after{content:'';display:block;height:1.4cqw;margin-top:-.2cqw;
   background:radial-gradient(circle at 12% 0,#8a0c08 .5cqw,transparent .55cqw),radial-gradient(circle at 37% 0,#8a0c08 .35cqw,transparent .4cqw),
   radial-gradient(circle at 63% 0,#8a0c08 .6cqw,transparent .65cqw),radial-gradient(circle at 86% 0,#8a0c08 .3cqw,transparent .35cqw)}
-#menu.title.home .lede{font-size:1.75cqw;max-width:40cqw;color:var(--dim)}
+#menu.title.home .lede{font-size:1.5cqw;max-width:40cqw;color:var(--dim)}
 #menu.title.home .btns{display:grid;grid-template-columns:1fr 1fr;width:38cqw;gap:.9cqw}
-#menu.title.home .btn{text-align:left;font-size:1.55cqw;padding:.9cqw 1.6cqw}
+#menu.title.home .btn{text-align:left;font-size:1.45cqw;padding:.75cqw 1.6cqw}
 #menu.title.home .btn.primary{grid-column:1 / -1;font-size:2cqw;padding:1.1cqw 1.6cqw}
 .btn.pilot{color:#120d08;background:#7fd8ff;outline:0}
 #pilot{position:absolute;inset:0;z-index:8;background:#000}
@@ -123,6 +134,14 @@ button{font:inherit}
 #pilotClose{position:absolute;top:1cqw;right:1cqw;font-size:1.2cqw;padding:.6cqw 1.2cqw}
 .tip{margin:0;font-family:var(--f-display);font-size:1.25cqw;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
 #menu:not(.title) .tip,#menu:not(.home) .tip{display:none}
+.crew{display:grid;grid-template-columns:1fr 1fr;gap:2cqw;width:80cqw}
+.crewCard{display:grid;grid-template-columns:14cqw 1fr;gap:1.4cqw;padding:1.4cqw;background:rgba(0,0,0,.5);outline:1px solid rgba(255,255,255,.12);text-align:left}
+.crewCard canvas{width:100%;aspect-ratio:1;image-rendering:pixelated;background:radial-gradient(circle at 50% 70%,rgba(111,211,156,.25),transparent 70%)}
+.crewCard input[type=text]{font:inherit;font-family:var(--f-display);font-size:1.8cqw;width:100%;box-sizing:border-box;padding:.5cqw .8cqw;background:rgba(0,0,0,.6);color:var(--ink);border:.15cqw solid rgba(236,228,207,.4)}
+.swatches{display:flex;flex-wrap:wrap;gap:.6cqw;align-items:center;margin-top:.8cqw}
+.swatches span{font-family:var(--f-display);font-size:1.1cqw;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);width:7cqw}
+.swatches button{width:2.4cqw;height:2.4cqw;border:0;padding:0;cursor:pointer;outline:.15cqw solid rgba(0,0,0,.6)}
+.swatches button.on{outline:.3cqw solid var(--amber)}
 .settings{display:flex;flex-direction:column;gap:1.2cqw;width:44cqw}
 .settings label{display:grid;grid-template-columns:16cqw 1fr 5cqw;align-items:center;gap:1.2cqw;font-family:var(--f-display);font-size:1.4cqw;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-align:left}
@@ -239,6 +258,7 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
           <button class="btn" id="almBtn" type="button">Almanac</button>
           <button class="btn" id="ctlBtn" type="button">Controls</button>
           <button class="btn" id="setBtn" type="button">Settings</button>
+          <button class="btn" id="crewBtn" type="button">Recruits</button>
           <button class="btn" id="arcadeBtn" type="button">Mini games</button>
           <button class="btn pilot" id="pilotBtn" type="button" hidden>Pilot edition</button>
           <button class="btn" id="quitBtn" type="button" hidden>Main menu</button>
@@ -285,6 +305,12 @@ h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:4.4cqw;line-h
           <div><dt>Jump</dt><dd>Jump</dd></div>
           <div><dt>Nade</dt><dd>Grenade / reload</dd></div>
         </dl>
+        <button class="btn back" type="button">Back</button>
+      </div>
+      <div class="card wide" id="crewView" hidden>
+        <p class="eyebrow">Your squad</p>
+        <h2>Recruits</h2>
+        <div class="crew" id="crewGrid"></div>
         <button class="btn back" type="button">Back</button>
       </div>
       <div class="card" id="settingsView" hidden>
@@ -961,6 +987,33 @@ function drawShredder(g, frame, brain = false) {
   zArm(g, 42, 25, swing ? 52 : 48, swing ? 12 : 44, 4, null, skin, true);
   if (swing) { g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(6, 20, 8, 1); g.fillRect(50, 18, 8, 1); }
 }
+// SECRET: Tung Tung Tung Sahur, a wooden log with a big grin and a baseball bat
+function drawTung(g, frame) {
+  const wood = '#a8743e', dark = '#5a3a1a', bat = '#e0c080';
+  if (frame === 'dead') {
+    g.fillStyle = shade(g, 6, 46, wood); g.fillRect(6, 52, 40, 10); g.fillStyle = dark; for (let x = 10; x < 46; x += 7) g.fillRect(x, 53, 1, 8);
+    g.save(); g.translate(50, 58); g.rotate(-0.3); g.fillStyle = bat; g.fillRect(-2, -14, 4, 16); g.restore();
+    return;
+  }
+  const step = frame === 'walk1' ? 4 : frame === 'walk2' ? -4 : 0, swing = frame === 'shoot';
+  // skinny legs and arms
+  limb(g, 27, 50, 26 - step / 2, 62, 3, dark); limb(g, 37, 50, 38 + step / 2, 62, 3, dark);
+  limb(g, 20, 30, 12, 42, 3, dark);
+  // the log body: rounded, with grain lines and a sawn top
+  g.fillStyle = shade(g, 19, 45, wood, 1.25, 0.6); g.beginPath(); g.ellipse(32, 9, 13, 4, 0, 0, Math.PI * 2); g.fill();
+  g.fillRect(19, 9, 26, 43);
+  g.fillStyle = '#c89a5a'; g.beginPath(); g.ellipse(32, 9, 12, 3.4, 0, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = dark; g.lineWidth = 0.8; g.beginPath(); g.ellipse(32, 9, 7, 2, 0, 0, Math.PI * 2); g.ellipse(32, 9, 3, 1, 0, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = 'rgba(70,40,15,.6)'; for (const x of [22, 27, 39, 43]) g.fillRect(x, 14, 1, 36);
+  // the face: big round eyes and a huge grin
+  for (const ex of [27, 37]) { g.fillStyle = '#fff'; disc(g, ex, 22, 4); g.fillStyle = '#000'; disc(g, ex + (swing ? 0 : 0.8), 22.5, 2); }
+  g.fillStyle = '#000'; g.fillRect(23, 16, 7, 1.5); g.fillRect(34, 16, 7, 1.5);
+  g.fillStyle = '#3a1a0a'; g.beginPath(); g.ellipse(32, 32, 7, swing ? 4 : 2.5, 0, 0, Math.PI); g.fill();
+  g.fillStyle = '#fff'; g.fillRect(27, 32, 10, 1.2);
+  // the bat: resting on the shoulder, or swung right at you
+  if (swing) { limb(g, 44, 30, 52, 22, 3, dark); g.save(); g.translate(52, 22); g.rotate(-0.6); g.fillStyle = bat; g.fillRect(-2, -20, 5, 22); g.fillRect(-3, -22, 7, 6); g.restore(); g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(56, 4, 6, 1); g.fillRect(58, 9, 5, 1); }
+  else { limb(g, 44, 30, 50, 40, 3, dark); g.save(); g.translate(50, 40); g.rotate(-0.25); g.fillStyle = bat; g.fillRect(-2, -26, 4, 28); g.fillRect(-3, -28, 6, 7); g.restore(); }
+}
 // a puker: a swollen, slow zombie that throws up thick black-green bile; it blinds you if it hits
 function drawPuker(g, frame) {
   const skin = '#8a9a6a', shirt = '#5a5a3a', bile = '#3a4a10', eye = '#ffd020';
@@ -1052,8 +1105,8 @@ function drawKing(g, frame) {
   if (shoot) { muzzle(g, 9, 44, 5); muzzle(g, 55, 44, 5); }
   if (frame === 'punch') drawFist(g, skin);
 }
-function drawHuman(g, { skin, helmet, frame, gun = 'rifle' }) {
-  const kit = '#5b6b45', pants = '#4a5638', vest = '#3b4230', boot = '#2a2620';
+function drawHuman(g, { skin, helmet, kit = '#5b6b45', frame, gun = 'rifle' }) {
+  const pants = tint(kit, 0.82), vest = tint(kit, 0.65), boot = '#2a2620';
   if (frame === 'dead') {
     g.fillStyle = kit; g.fillRect(12, 54, 32, 8);
     g.fillStyle = pants; g.fillRect(40, 55, 10, 6);
@@ -1135,6 +1188,8 @@ const KINDS = {
     tex: frames(drawDrone) },
   B: { name: 'butcher', title: 'The Butcher', hp: 1200, r: 0.62, scale: 1.7, h: 1.6, speed: 1.0, boss: true, cd: [2.2, 3.2],
     punch: true, tex: frames(drawBoss, [...FRAMES, 'punch']) },
+  T: { name: 'tung tung tung sahur', title: 'Tung Tung Tung Sahur', hp: 450, r: 0.36, scale: 1.25, h: 1.2, speed: 2.6, melee: true, tung: true, reach: 1.5, dmg: [16, 22], cd: [0.9, 1.3],
+    tex: frames(drawTung) },
   u: { name: 'puker', hp: 90, r: 0.4, scale: 1.1, h: 1.0, speed: 1.3, melee: true, blind: true, reach: 3.2, dmg: [4, 7], cd: [1.8, 2.6],
     tex: frames(drawPuker) },
   m: { name: 'runner', hp: 55, r: 0.34, scale: 1, h: 0.95, speed: 3.6, melee: true, reach: 1.3, dmg: [10, 15], cd: [0.7, 1.1],
@@ -1151,15 +1206,19 @@ const KINDS = {
 KINDS.g.tex = KINDS.g.guns.pistol;
 KINDS.h.tex = KINDS.h.guns.minigun;
 const RECRUITS = [
-  { name: 'Skid', look: { skin: '#d0a07a', helmet: '#4d5a3a' } },
-  { name: 'Moe', look: { skin: '#7a5238', helmet: '#5c5040' } },
+  { name: 'Skid', look: { skin: '#d0a07a', helmet: '#4d5a3a', kit: '#5b6b45' } },
+  { name: 'Moe', look: { skin: '#7a5238', helmet: '#5c5040', kit: '#5b6b45' } },
 ];
 const ALLY_GUNS = ['rifle', 'shotgun', 'flamer', 'launcher', 'minigun']; // weakest to strongest
 const GUN_NAMES = { rifle: 'Rifle', shotgun: 'Shotgun', flamer: 'Flamethrower', launcher: 'Grenade launcher', minigun: 'Minigun' };
-for (const r of RECRUITS) {
+// recruits can be customised (name, skin, helmet, uniform) on the Recruits screen; saved in this browser
+const RECRUIT_KEY = 'rust-sector-recruits';
+try { (JSON.parse(localStorage.getItem(RECRUIT_KEY) || '[]')).forEach((c, i) => { if (RECRUITS[i] && c) { RECRUITS[i].name = String(c.name || RECRUITS[i].name).slice(0, 10); Object.assign(RECRUITS[i].look, c.look); } }); } catch (e) {}
+function buildRecruit(r) {
   r.guns = Object.fromEntries(ALLY_GUNS.map(gun => [gun, frames((g, f) => drawHuman(g, { ...r.look, gun, frame: f }), HUMAN_FRAMES)]));
   r.tex = r.guns.rifle;
 }
+RECRUITS.forEach(buildRecruit);
 const ALLY = { hp: 80, r: 0.3, scale: 0.95, speed: 2.8 };
 
 const ITEM = {
@@ -1960,6 +2019,9 @@ const sfx = {
   pickup() { tone('triangle', 520, 1100, 0.14, 0.35); },
   coin() { tone('square', 988, 988, 0.08, 0.2); tone('square', 1319, 1319, 0.35, 0.2, 0.08); },
   puke(v) { burst(0.6, 700, 150, 0.5 * v); tone('sawtooth', 140, 60, 0.5, 0.2 * v); },
+  // tung tung tung... SAHUR! (three wooden knocks, then a two-note call)
+  tung(v) { for (let i = 0; i < 3; i++) { tone('sine', 820, 520, 0.08, 0.6 * v, i * 0.24); burst(0.05, 3000, 1200, 0.3 * v, 'bandpass'); } tone('triangle', 330, 330, 0.18, 0.35 * v, 0.78); tone('triangle', 247, 220, 0.4, 0.35 * v, 0.98); },
+  bonk(v) { tone('sine', 520, 180, 0.15, 0.8 * v); burst(0.1, 2500, 600, 0.5 * v, 'bandpass'); },
   hiss() { burst(1.4, 6000, 3000, 0.25, 'highpass'); },
   jump() { tone('sine', 220, 330, 0.08, 0.15); },
   land() { burst(0.08, 600, 120, 0.25); },
@@ -2086,6 +2148,13 @@ function spawnWave(zone) {
   }
   const extra = P.has.railgun && Math.random() < 0.4 ? 'cells' : P.has.sniper ? 'rounds' : null, es = extra && findSpot(zone, 4, 999, false);
   if (es) items.push({ type: extra, x: es.x, y: es.y, taken: false });
+  if (Math.random() < 0.03) spawnTung();
+}
+function spawnTung() {
+  const s = findSpot(-1, 9, 18, true) || findSpot(-1, 6, 24, false);
+  if (!s) return;
+  const e = makeEnemy('T', s.x, s.y); e.alert = true; enemies.push(e);
+  sfx.tung(1); toastMsg('Tung tung tung... SAHUR!');
 }
 function spawnBoss() {
   const s = findSpot(-1, 11, 18, true) || findSpot(-1, 8, 24, false);
@@ -2287,7 +2356,8 @@ function damage(e, n, quiet) {
       // robots with a big gun sometimes drop it: recruits will grab it, or you can take its ammo
       if (e.gun && e.gun !== 'pistol' && Math.random() < 0.5) items.push({ type: 'drop', gun: e.gun, x: e.x + rand(-0.2, 0.2), y: e.y + rand(-0.2, 0.2), taken: false });
       else if (Math.random() < 0.45) items.push({ type: 'clip', x: e.x + rand(-0.2, 0.2), y: e.y + rand(-0.2, 0.2), taken: false });
-      if (!MAPS[mapIndex].arena) respawns.push({ code: e.code || 'g', t: rand(14, 22) });
+      if (!MAPS[mapIndex].arena && !e.k.tung) respawns.push({ code: e.code || 'g', t: rand(14, 22) });
+      if (e.k.tung) toastMsg('You beat Tung Tung Tung Sahur!');
       if (!MAPS[mapIndex].arena && stats.kills >= bossAt() && !P.bossSpawned) { P.bossSpawned = true; spawnBoss(); }
       else if (!P.bossSpawned && (bossAt() - stats.kills === 10 || bossAt() - stats.kills === 5)) toastMsg((bossAt() - stats.kills) + ' more until ' + bossName(true));
     }
@@ -2377,12 +2447,14 @@ function meleeHit(e, t, pd) {
     sfx.puke(clamp(1.3 - pd / 12, 0.15, 1));
     const a = Math.atan2((t || P).y - e.y, (t || P).x - e.x);
     for (let i = 0; i < 8; i++) { const b = a + rand(-0.2, 0.2), s = rand(3, 6); puffs.push({ x: e.x + Math.cos(b) * 0.4, y: e.y + Math.sin(b) * 0.4, z: 0.8, t: 0.5, life: 0.5, vx: Math.cos(b) * s, vy: Math.sin(b) * s, kind: 'bile' }); }
-  } else sfx.slash(clamp(1.3 - pd / 12, 0.15, 1));
+  } else if (e.k.tung) sfx.bonk(clamp(1.3 - pd / 12, 0.15, 1));
+  else sfx.slash(clamp(1.3 - pd / 12, 0.15, 1));
   if (!t || (t !== P && t.state === 'down')) return;
   const d = Math.hypot(t.x - e.x, t.y - e.y);
   if (d > e.k.reach + 0.4 || (t === P && P.z > 0.9)) return;
   const n = rand(e.k.dmg[0], e.k.dmg[1]);
   t === P ? hurtPlayer(n) : hurtAlly(t, n);
+  if (e.k.tung) { const dx = t.x - e.x, dy = t.y - e.y, dd = Math.hypot(dx, dy) || 1; t === P ? (movePlayer(dx / dd * 1.4, dy / dd * 1.4), P.vz = 3, P.onGround = false) : move(t, dx / dd * 1.2, dy / dd * 1.2, 0.3); }
   if (e.k.blind && t === P) { P.blind = 3.5; toastMsg('Puked on! Wipe your eyes...'); }
   else if (!e.k.blind) spawnPuff(e.x + (t.x - e.x) * 0.6, e.y + (t.y - e.y) * 0.6, 'spark', 0.4);
 }
@@ -2610,6 +2682,7 @@ function updateEnemies(dt) {
       if (Math.random() < dt * 9) spawnFlame(e.x + rand(-0.2, 0.2), e.y + rand(-0.2, 0.2), e.z + rand(0.05, 0.5), 0, 0, 0.35);
     }
     if (e.punching > 0) e.punching -= dt;
+    if (e.k.tung && e.alert && (e.chantT = (e.chantT ?? 0) - dt) <= 0) { e.chantT = 3.2; sfx.tung(clamp(1.4 - Math.hypot(P.x - e.x, P.y - e.y) / 18, 0.2, 1)); }
     if (e.k.king) {
       const ph = e.hp < e.k.hp / 3 ? 3 : e.hp < e.k.hp * 2 / 3 ? 2 : 1;
       if (ph > (e.phase || 1)) {
@@ -3475,6 +3548,7 @@ function showView(name) {
   $('controlsView').hidden = name !== 'controls';
   $('mapsView').hidden = name !== 'maps';
   $('settingsView').hidden = name !== 'settings';
+  $('crewView').hidden = name !== 'crew';
   $('horde').hidden = name !== 'main' || !menu.classList.contains('title');
   menu.classList.toggle('home', name === 'main');
   const focus = name === 'main' ? $('mBtn') : name === 'maps' ? document.querySelector('.mapCard:not(:disabled)') : document.querySelector(`#${name}View .back`);
@@ -3515,8 +3589,10 @@ function showMenu(kind) {
 }
 function start(i = mapIndex) {
   cine = null; screenEl.classList.remove('cine');
+  const summonTung = sahurNext; sahurNext = false;
   logGame('quit');
   initAudio(); loadMap(i); newGame(); logBug('game', 'start ' + MAPS[i].name); state = 'play'; menu.hidden = true; lock(); setMusicLevel();
+  if (summonTung) setTimeout(() => state === 'play' && spawnTung(), 5000);
   if (MAPS[i].arena) {
     for (const w of ORDER) P.has[w] = true;
     P.armor = 100;
@@ -3573,6 +3649,28 @@ function openExtra(page) {
 $('pilotBtn').addEventListener('click', () => openExtra('pilot.html'));
 $('arcadeBtn').addEventListener('click', () => { initAudio(); openExtra('arcade.html'); });
 $('pilotClose').addEventListener('click', () => { $('pilotFrame').removeAttribute('srcdoc'); $('pilotFrame').src = 'about:blank'; $('pilot').hidden = true; pilotOpen = false; setMusicLevel(); $('mBtn').focus(); });
+// Recruits screen: rename Skid and Moe and pick their skin, helmet and uniform colours
+const CREW_COLORS = {
+  skin: ['#f0c8a0', '#d0a07a', '#a8764e', '#7a5238', '#4e3020', '#8aa070'],
+  helmet: ['#4d5a3a', '#5c5040', '#2a2a2e', '#8a2a20', '#2a4a7a', '#d0a020', '#e8e0d0'],
+  kit: ['#5b6b45', '#4a5a6a', '#6a4a30', '#3a3a40', '#7a2a2a', '#2a5a5a', '#8a7a50'],
+};
+function renderCrew() {
+  $('crewGrid').innerHTML = RECRUITS.map((r, i) => `<div class="crewCard"><canvas id="crew${i}" width="64" height="64"></canvas><div>
+    <input type="text" id="crewName${i}" maxlength="10" value="${r.name.replace(/[<>&"]/g, '')}" aria-label="Recruit ${i + 1} name">
+    ${Object.entries({ skin: 'Skin', helmet: 'Helmet', kit: 'Uniform' }).map(([part, label]) => `<div class="swatches"><span>${label}</span>${CREW_COLORS[part].map(c =>
+      `<button type="button" data-i="${i}" data-part="${part}" data-c="${c}" class="${r.look[part] === c ? 'on' : ''}" style="background:${c}" aria-label="${label} ${c}"></button>`).join('')}</div>`).join('')}
+  </div></div>`).join('');
+  RECRUITS.forEach((r, i) => {
+    const g = $('crew' + i).getContext('2d'); g.imageSmoothingEnabled = false; drawHuman(g, { ...r.look, gun: 'rifle', frame: 'idle' });
+    $('crewName' + i).addEventListener('input', e => { r.name = e.target.value.trim().slice(0, 10) || ['Skid', 'Moe'][i]; saveCrew(); });
+  });
+  document.querySelectorAll('#crewGrid .swatches button').forEach(b => b.addEventListener('click', () => {
+    const r = RECRUITS[+b.dataset.i]; r.look[b.dataset.part] = b.dataset.c; buildRecruit(r); saveCrew(); renderCrew();
+  }));
+}
+function saveCrew() { try { localStorage.setItem(RECRUIT_KEY, JSON.stringify(RECRUITS.map(r => ({ name: r.name, look: r.look })))); } catch (e) {} }
+$('crewBtn').addEventListener('click', () => { renderCrew(); showView('crew'); });
 $('radarBtn').addEventListener('click', () => { showMap = !showMap; $('radarBtn').textContent = 'Radar: ' + (showMap ? 'On' : 'Off'); });
 for (const [id, key] of [['volMusic', 'music'], ['volSfx', 'sfx'], ['sens', 'sens']]) {
   const el = $(id), out = $(id + 'Out');
@@ -3750,15 +3848,16 @@ renderMaps();
 
 // ---------- input ----------
 // secret codes, typed on the title screen
-let typed = '', superJump = false, danceT = 0;
+let typed = '', superJump = false, danceT = 0, sahurNext = false;
 const CODES = {
   creeper() { sfx.hiss(); setTimeout(() => { sfx.boom(1); menu.animate([{ filter: 'brightness(4)' }, { filter: 'none' }], 400); toastMsg('Sssss... BOOM! A creeper got too close'); }, 1400); },
   dance() { danceT = 6; toastMsg('The horde hits a victory dance!'); },
+  sahur() { sahurNext = true; sfx.tung(1); toastMsg('Tung tung tung... he is coming in your next game'); },
   wahoo() { superJump = !superJump; sfx.coin(); toastMsg(superJump ? 'Wahoo! Super jump is on' : 'Super jump is off'); },
 };
 addEventListener('keydown', e => {
   keys[e.code] = true;
-  if (state === 'menu' && e.key.length === 1) {
+  if (state === 'menu' && e.key.length === 1 && !(e.target instanceof HTMLInputElement)) {
     typed = (typed + e.key.toLowerCase()).slice(-12);
     for (const c in CODES) if (typed.endsWith(c)) { typed = ''; initAudio(); CODES[c](); }
   }
