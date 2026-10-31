@@ -1229,9 +1229,10 @@ const ALLY_GUNS = ['rifle', 'shotgun', 'flamer', 'launcher', 'minigun']; // weak
 const GUN_NAMES = { rifle: 'Rifle', shotgun: 'Shotgun', flamer: 'Flamethrower', launcher: 'Grenade launcher', minigun: 'Minigun' };
 // recruits can be customised (name, skin, helmet, uniform) on the Recruits screen; saved in this browser
 const RECRUIT_KEY = 'rust-sector-recruits';
+// secret code unlocks only last while the game is open: closing or reloading forgets them (by request)
 let tungUnlocked = false;
-try { tungUnlocked = localStorage.getItem('rust-sector-tung') === 'yes'; } catch (e) {}
-try { (JSON.parse(localStorage.getItem(RECRUIT_KEY) || '[]')).forEach((c, i) => { if (RECRUITS[i] && c) { RECRUITS[i].name = String(c.name || RECRUITS[i].name).slice(0, 22); Object.assign(RECRUITS[i].look, c.look); } }); } catch (e) {}
+try { localStorage.removeItem('rust-sector-tung'); } catch (e) {} // clear the unlock older versions saved
+try { (JSON.parse(localStorage.getItem(RECRUIT_KEY) || '[]')).forEach((c, i) => { if (RECRUITS[i] && c) { RECRUITS[i].name = String(c.name || RECRUITS[i].name).slice(0, 22); Object.assign(RECRUITS[i].look, c.look, { tung: false }); } }); } catch (e) {}
 function buildRecruit(r) {
   r.guns = Object.fromEntries(ALLY_GUNS.map(gun => [gun, frames((g, f) => drawHuman(g, { ...r.look, gun, frame: f }), HUMAN_FRAMES)]));
   r.tex = r.guns.rifle;
@@ -3837,7 +3838,7 @@ function renderCrew() {
     const r = RECRUITS[+b.dataset.i]; r.look[b.dataset.part] = b.dataset.c; buildRecruit(r); saveCrew(); renderCrew();
   }));
 }
-function saveCrew() { try { localStorage.setItem(RECRUIT_KEY, JSON.stringify(RECRUITS.map(r => ({ name: r.name, look: r.look })))); localStorage.setItem('rust-sector-tung', tungUnlocked ? 'yes' : 'no'); } catch (e) {} }
+function saveCrew() { try { localStorage.setItem(RECRUIT_KEY, JSON.stringify(RECRUITS.map(r => ({ name: r.name, look: { ...r.look, tung: false } })))); } catch (e) {} }
 $('crewBtn').addEventListener('click', () => { renderCrew(); showView('crew'); });
 let crewTick = 0;
 setInterval(() => {

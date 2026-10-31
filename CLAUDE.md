@@ -59,7 +59,7 @@ simple, warm, short and skimmable. Answer Bill directly when a message is clearl
 - **Easter eggs**: per game each has a 1-in-3 chance to be hidden far out: ? block (Mario, +50 max health), diamond
   (Minecraft, full armor), rusty chest (Risk of Rain, fire 15% faster via `P.rate`), loot llama (Fortnite, ammo).
   Codes typed on the title screen (silent: no message, only a sound or effect, by request): `creeper`, `dance`, `wahoo` (super jump), `triple t` (unlocks a Tung Tung Tung
-  Sahur skin for the recruits, saved in localStorage `rust-sector-tung`; drawn by `drawHuman` with `tung: true`).
+  Sahur skin for the recruits, in memory only: reloading forgets it and turns the skin off (by request); drawn by `drawHuman` with `tung: true`).
   Ernie asked for no Tung enemy.
 - **Recruits screen**: rename Skid/Moe and pick skin, helmet and uniform colours (`CREW_COLORS`, `buildRecruit`), saved in
   localStorage `rust-sector-recruits`. Zombies sometimes show their brain.
